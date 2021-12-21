@@ -66,3 +66,120 @@ Hình ảnh minh họa:
 <h3 align="center"><img src="../../03-Images/document/flisk.png"></h3>
 
 ## 2. Tạo Physical Volume
+
+- Tạo các Physical Volume : /dev/sdb1 và /dev/sdc1
+```sh 
+pvcreate /dev/sdb1 /dev/sdc1
+#hoặc
+pvcreate /dev/sdb1
+pvcreate /dev/sdc1
+```
+
+kết quả: 
+```sh
+root@node2:~# pvcreate /dev/sdb1 /dev/sdc1
+  Physical volume "/dev/sdb1" successfully created.
+  Physical volume "/dev/sdc1" successfully created.
+root@node2:~#
+```
+
+## 3. Tạo  Volume Group
+
+- Nhóm nhiều Physical Volume thành 1 Volume Group bằng
+
+```sh
+vgcreate LVM_volume1 /dev/sdb1 /dev/sdc1
+```
+
+## 3. Tạo  Volume Group
+kiểm tra Volume 
+```sh
+vgs
+vgdisplay
+```
+<h3 align="center"><img src="../../03-Images/document/59.png"></h3>
+
+## 4. Tạo Logical Volume
+### 4.1 khởi tạo với dung lượng chỉ định
+- từ 1 Volume Group có thể thực hiện tạo 1 hoặc nhiều Logical Volume với mức dung lượng chỉ định
+```sh
+lvcreate -L 5G -n lv-volume1 LVM_volume1
+```
+trong đó: 
+  - `-L`: Dung lượng của Logical Volume cần tạo
+  - `-n`: Tên Logical Volume, ở đây là **lv-volume1**
+  - `LVM_volume1`: Volume Group được sử dụng để tạo Logical Volume
+
+```sh
+root@node2:~# lvcreate -L 5G -n lv-volume1 LVM_volume1
+  Logical volume "lv-volume1" created.
+root@node2:~#
+```
+kiểm tra:
+<h3 align="center"><img src="../../03-Images/document/60.png"></h3>
+
+### 4.2 khởi tạo Logical Volume với toàn bộ dung lượng vốn có
+
+```sh
+lvcreate -l 100%FREE -n lv-volume1 LVM_volume1
+```
+
+## 5. Định dạng Logical Volume
+```sh
+mkfs -t ext4 /dev/LVM_volume1/lv-volume1
+```
+<h3 align="center"><img src="../../03-Images/document/61.png"></h3>
+
+
+## 6. Mount và đưa vào sử dụng
+
+```sh
+mkdir /LVM01
+```
+
+- thực hiện mount Logical Volume vào thư mục vừa khởi tạo
+```sh
+mount /dev/LVM_volume1/lv-volume1 /LVM01
+```
+
+Kiểm tra lại dung lượng
+<h3 align="center"><img src="../../03-Images/document/62.png"></h3>
+
+
+
+# Phần II. Thao tác cơ bản Logical Volume trên LVM
+## 1. Kiểm tra toàn bộ
+```sh
+vgs
+lvs
+pvs
+```
+
+<h3 align="center"><img src="../../03-Images/document/63.png"></h3>
+
+## 2. Kiểm tra dung lượng Volume Group
+```sh
+vgdisplay
+```
+<h3 align="center"><img src="../../03-Images/document/64.png"></h3>
+
+## 3. Tăng kích thước Logical Volume
+
+- sử dụng câu lệnh sau đầy để tăng kịch thước Logical Volume
+
+```sh
+lvextend -L +3G /dev/LVM_volume1/lv-volume1
+```
+trong đó:
+  - `-L +3G`: Dung lượng cần tăng thêm
+  - `/dev/LVM_volume1/lv-volume1`: Logical Volume cần tăng dung lượng
+
+<h3 align="center"><img src="../../03-Images/document/65.png"></h3>
+
+Kiểm tra lại
+```sh
+lvs
+```
+<h3 align="center"><img src="../../03-Images/document/66.png"></h3>
+
+> 
