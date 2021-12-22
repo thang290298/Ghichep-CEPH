@@ -91,7 +91,6 @@ root@node2:~#
 vgcreate LVM_volume1 /dev/sdb1 /dev/sdc1
 ```
 
-## 3. Tạo  Volume Group
 kiểm tra Volume 
 ```sh
 vgs
@@ -174,12 +173,102 @@ trong đó:
   - `-L +3G`: Dung lượng cần tăng thêm
   - `/dev/LVM_volume1/lv-volume1`: Logical Volume cần tăng dung lượng
 
-<h3 align="center"><img src="../../03-Images/document/65.png"></h3>
+
 
 Kiểm tra lại
 ```sh
 lvs
 ```
-<h3 align="center"><img src="../../03-Images/document/66.png"></h3>
 
-> 
+> Kích thước cho Logical Volume thì Logical Volume đã được tăng nhưng file system trên volume này vẫn chưa thay đổi, sử dụng lệnh sau:
+```sh
+resize2fs /dev/LVM_volume1/lv-volume1
+```
+
+## 4. Giảm kích thước Logical Volume
+
+- Tiến hành giảm kích thước của Logical Volume
+```sh
+lvreduce -L 2G /dev/LVM_volume1/lv-volume1
+```
+- Tiến hành format lại Logical Volume
+```sh
+mkfs.ext4 /dev/LVM_volume1/lv-volume1
+```
+
+- Mount lại Logical Volume
+```sh
+mount /dev/LVM_volume1/lv-volume1 /LVM01
+```
+
+
+# Phần III. Thao tác cơ bản Volume Group trên LVM
+
+- Việc thay đổi kích thước của Volume Group chính là việc nhóm thêm Physical Volume hay thu hồi Physical Volume ra khỏi Volume Group
+
+## 1. Kiểm tra các partition và Volume Group
+```sh
+vgs
+lsblk
+```
+
+## 2. Thêm partition vào Volume Group
+
+- Thêm 1 partition vào Volume Group như sau:
+```sh
+vgextend /dev/VG1 /dev/sdc1
+```
+ket qua:
+```sh
+[root@masterkvm7101 ~]# vgextend /dev/VG1 /dev/sdc1
+WARNING: ext4 signature detected on /dev/sdc1 at offset 1080. Wipe it? [y/n]: y
+  Wiping ext4 signature on /dev/sdc1.
+  Physical volume "/dev/sdc1" successfully created.
+  Volume group "VG1" successfully extended
+[root@masterkvm7101 ~]#
+```
+
+Kiểm tra
+```sh
+[root@masterkvm7101 ~]# vgs
+  VG     #PV #LV #SN Attr   VSize    VFree
+  VG1      3   1   0 wz--n-    1.09t 446.62g
+  centos   1   1   0 wz--n- <214.00g      0
+[root@masterkvm7101 ~]#
+```
+
+## 3. Xóa partition ra khỏi Volume Group
+
+- thực hiện câu lệnh sau:
+```sh
+vgreduce /dev/VG1 /dev/sdc1
+```
+
+
+
+# Phần IV. Xóa Logical Volume, Volume Group, Physical Volume
+> Trước tiên cần phải Umount Logical Volume
+
+```sh
+umount /dev/VG1/VPS1
+```
+
+## 1. Xóa Logical Volume
+```sh
+lvremove /dev/VG1/VPS1
+```
+
+## 2. Xóa Volume Group
+
+
+- Trước khi xóa Volume Group, chúng ta phải xóa hết Logical Volume
+```sh
+vgremove /dev/VG1
+```
+
+## 3. Xóa Physical Volume
+
+
+```sh
+pvremove /dev/sdb1
+```
