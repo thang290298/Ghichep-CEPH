@@ -1,9 +1,9 @@
 <h1 align="center">Tổng quan về filesystem</h1>
 
 # Phần I. Giới thiệu
-- Trong máy tình, file system hoặc filesystem được sử dụng để kiểm soát dữ liệu, lưu trữ và lấy lại. Quản lý vị trí ghi file, giúp xác định vị trí điểm bắt đầu và kêt thúc. File system được bắt nguồn từ hệ thống lưu trữ trên giấy, nhóm các dữ liệu được gọi là “file”. Cấu trúc và luật logic được sử dụng để quản lý các nhóm thống tin và chúng được gọi là `file system`.
+- Trong máy tính, file system hoặc filesystem được sử dụng để kiểm soát dữ liệu, lưu trữ và lấy lại. Quản lý vị trí ghi file, giúp xác định vị trí điểm bắt đầu và kêt thúc. File system được bắt nguồn từ hệ thống lưu trữ trên giấy, nhóm các dữ liệu được gọi là “file”. Cấu trúc và luật logic được sử dụng để quản lý các nhóm thống tin và chúng được gọi là `file system`.
 
-- Có nhiều loại file system, đối với mỗi loài system sẽ có đắc điểm khách nhau về tính chất về tốc độ, tính linh hoạt, bảo mật, size...1 số file system được thiết kể để sử dụng cho 1 số ứng dụng đặc biệt
+- Có nhiều loại file system, đối với mỗi loài system sẽ có đắc điểm khác nhau về tính chất về tốc độ, tính linh hoạt, bảo mật, size...1 số file system được thiết kể để sử dụng cho 1 số ứng dụng đặc biệt
   - ví dụ:
     - ISO 9660 file system được thiết đặc biệt cho đĩa quang
 - File system có thể sử dụng nhiều trên loại thiết bị lưu trữ và các loại phương tiên truyền thống khác nhau, nổi bật và thông thường nhất là ổ đĩa cứng. Một số file system được sử dụng cho local data storage devices, bên cạnh đó cung cấp truy chế truy cập file thông qua giao thức mạng (NFS, SMB, 9P). Một số file system là ảo, có nghĩa cung cấp “file” ảo sử dụng cho những yêu cấu tính toán hoặc ánh xạ vào nhưng file system khác. File system quản lý truy cập trên cả nội dung của file và metadata của nhưng file này. Nó chịu trách nhiệp sắp xếp không gian lưu trữ đảm bảo, tin cậy, rõ ràng, có hệ thống.
