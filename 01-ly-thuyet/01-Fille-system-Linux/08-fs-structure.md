@@ -5,17 +5,17 @@
 - Disk được sử dụng nhiều cho hoạt động lưu trữ và duy trì FS. 2 điểm quan trọng của Disk khiến nó được sử dụng:
   - Chúng có thể được viết lại bằng cách thay thế; có thể đọc một khối từ đĩa, sửa một khối và viết nó ngược trở lại đĩa trong cùng vị trí.
   - Chúng có thể được truy xuất trực tiếp bất cứ khối thông tin nào trên đĩa
-- Để cải thiện HS IO, quá trình truyền giữa memory và disk thực hiện trên đơn vị blocks. Mỗi block có 1 hoặc nhiều sector. Dựa trên disk drive, sector size từ 32 bytes tới 4096 byte. Thông thường 512 byte.
+- Để cải thiện hiệu suất IO, quá trình truyền giữa memory và disk thực hiện trên đơn vị blocks. Mỗi block có 1 hoặc nhiều sector. Dựa trên disk drive, sector size từ 32 bytes tới 4096 byte. Thông thường 512 byte.
 
 ## II. Cấu trúc File system
 
-FS cung cấp tính thuận tiện và hiệu quá khi truy cập disk. Cho phép data lưu, định vị, truy xuất dễ dàng.
+Filesystem cung cấp tính thuận tiện và hiệu quá khi truy cập disk. Cho phép data lưu, định vị, truy xuất dễ dàng.
 
-FS có 2 vấn đề cơ bản:
-  - Cách FS thể hiển từ phía user.
-  - Giải thuật, cấu trúc dữ liệu ánh xạ logical file system vào thiết bị lưu trữ
+Filesystem có 2 vấn đề cơ bản:
+  - Cách Filesystem thể hiển từ phía user.
+  - Giải thuật, cấu trúc dữ liệu ánh xạ logical filesystem vào thiết bị lưu trữ
 
-FS được tạo thành từ nhiều cấp, các cấp được thiết kế để tận sử dụng các tính năng của các cấp khác. Mô hình cơ bản
+Filesystem được tạo thành từ nhiều cấp, các cấp được thiết kế để tận sử dụng các tính năng của các cấp khác. Mô hình cơ bản
 
 <h3 align="center"><img src="../../03-Images/document/18.png"></h3>
 
@@ -26,7 +26,7 @@ FS được tạo thành từ nhiều cấp, các cấp được thiết kế đ
 - Device driver thường viết các mẫu bit xác định tới các vị trí trong I/O controller’s memory để báo với bộ điều khiển vị trí trên thiết bị nào và hoạt động gì xảy ra.
 
 ### 2.2 Basic file system - Hệ thống tập tin cơ bản
-- Phát ra các lệnh thông thường tới các  device driver  tương ứng để đọc và viết các khối vật lý trên đĩa. Mỗi khối vật lý được xác định bởi địa chỉ đĩa (thí dụ, đĩa 1, cyclinder 73, track 2, sector 10).
+- Phát ra các lệnh thông thường tới các  device driver  tương ứng để đọc và viết các khối vật lý trên đĩa. Mỗi khối vật lý được xác định bởi địa chỉ đĩa (ví dụ, đĩa 1, cyclinder 73, track 2, sector 10).
 - Lớp này còn quản lý  **memory buffers, caches**  lưu trữ các  file system, directory, data blocks khác nhau .
 - Block trong cluster được cấp phát trước khi tiền trình chuyển tới disk block xảy ra.
 - Khi full,  buffer manager  sẽ tìm thêm hoặc giải thoát  buffer memory  để chấp nhận  requested I/O . Cache thường sử dụng để lưu file-system metadata thương sử dụng, năng cao hiệu năng.

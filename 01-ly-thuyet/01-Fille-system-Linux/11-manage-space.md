@@ -2,7 +2,7 @@
 
 ## I. Tổng quan
 
-- OS cần biết danh sách không gian trống để lưu trữ và quả lý. OS sử dụng 1 danh sách quản lý không gian trống. List này ghi lại tất cả khối trống.
+- OS cần biết danh sách không gian trống để lưu trữ và quản lý. OS sử dụng 1 danh sách quản lý không gian trống. List này ghi lại tất cả khối trống.
 
 - Khi tạo mới 1 file, OS tìm trong list không gian trống, không gian trống được chọn sẽ xóa khỏi danh sách. Hoặc khi xóa file, block xóa sẽ được đưa vào list không gian chống.
 

@@ -36,7 +36,7 @@ __Cấu trúc thư mục dạng hai cấp__
 
 <h3 align="center"><img src="../../03-Images/document/14.png"></h3>
 
-__Cấu trúc thư mục dạng cây__
+**Cấu trúc thư mục dạng cây**
 - Tổng quát của thư mục hai cấp
 - Cho phép người dùng tạo thư mục con và tổ chức các tập tin của họ
 - Cây có thư mục gốc, Mỗi tập tin trong hệ thống có tên đường dẫn duy nhất
@@ -45,11 +45,12 @@ __Cấu trúc thư mục dạng cây__
 - Mỗi người dùng có thư mục hiện hành, chứa hầu hết các tập tin người dùng hiện đang quan tâm. Người dùng có thể thay đổi đường dẫn hiện hành (xác định đường dẫn).
 - Thư mục hiện hành khởi đầu của người dùng được gán khi người dùng đăng nhập vào hệ thống. Hệ điều hành tìm tập tin tính toán để xác định mục từ cho người dùng này.
 - Trong tập tin tính toán là con trỏ chỉ tới thư mục khởi đầu của người dùng (Con trỏ - một biến cục bộ cho người dùng xác định thư mục hiện hành khởi đầu).
-- Đường dẫn có hai kiểu: __tên đường dẫn tuyệt__ đối và __tên đường dẫn tương đối__
+- Đường dẫn có hai kiểu:**tên đường dẫn tuyệt** đối và **tên đường dẫn tương đối**
 - Hệ thống thư mục cấu trúc cây, cho phép user truy xuất tới các tập tin của họ và các tập tin của người dùng khác
 
 <h3 align="center"><img src="../../03-Images/document/15.png"></h3>
-__Cấu trúc thư mục dạng đồ thị không chứa chu trình__
+**Cấu trúc thư mục dạng đồ thị không chứa chu trình**
+
 - VD: cần chia sẻ dữ liệu chung giữa 2 người cùng cấp. Cấu trúc cây ngăn cản việc chia sẻ các tập tin và thư mục
 => đồ thị không chứa chu trình (acyclic graph) cho phép thư mục chia sẻ thư mục con và tập tin
 - Cùng tập tin và thư mục con có thể ở trong hai thư mục khác nhau
@@ -61,7 +62,8 @@ __Cấu trúc thư mục dạng đồ thị không chứa chu trình__
 - Khi xóa, hệ thống chia sẻ sử dụng liên kết biểu tượng. Việc xoá một liên kết không cần tác động tập tin nguồn, chỉ liên kết bị xoá. Nếu chính tập tin bị xoá, không gian cho tập tin này được thu hồi, để lại các liên kết chơi vơi. Yêu cầu quan lý các liên kết tới file, chúng ta thật sự không cần giữ toàn bộ danh sách-chúng ta chỉ cần giữ số đếm của số tham chiếu. Một liên kết mới hay mục từ thư mục mới sẽ tăng số đếm tham chiếu; xoá một liên kết hay mục từ sẽ giảm số đếm. Khi số đếm là 0, tập tin có thể được xoá; không còn tham chiếu nào tới nó.
 - Hệ điều hành UNIX sử dụng pp trên cho liên kết cứng - giữ một số đếm tham chiếu trong khối thông tin tập tin (hay inode)
 <h3 align="center"><img src="../../03-Images/document/16.png"></h3>
-__Cấu trúc thư mục dạng đồ thị tổng quát__
+**Cấu trúc thư mục dạng đồ thị tổng quát**
+
 - Cấu trúc đồ thị không chứa chu trình là đảm bảo rằng không có chu trình trong đồ thị. Vấn đề khi chúng ta liên kết một thư mục cấu trúc cây đã có, cấu trúc cây bị phá vỡ hình thành một đồ thị đơn giản
 - Vì sử dụng pp liên kết => phá bỏ đặc tính của cây thư mục – tạo đồ thị cơ bản.
 

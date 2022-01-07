@@ -2,7 +2,7 @@
 
 ## I. Tổng quan
 
-1 trong những vai trò quan trọng OS là quản trong hoạt động I/O - điều kiến tác vụ I/O, các thiết bị I/O, quản lý và điều khiển các thao tác nhập/xuất và các thiết bị nhập/xuất.
+- Một trong những vai trò quan trọng OS là quản lý hoạt động I/O - điều kiến tác vụ I/O, các thiết bị I/O, quản lý và điều khiển các thao tác nhập/xuất và các thiết bị nhập/xuất.
 
 **Các khái niệm cơ bản**
 - Kiểm soát thiết bị kết nối PC là 1 nội dung chính của OS.
@@ -13,7 +13,7 @@
 Các thành phần phần cứng nhập/xuất cơ bản như cổng, bus và bộ điều khiển thiết bị chứa trong một dãy rộng các thiết bị nhập/xuất.
 
 ## II. I/O Hardware
-Device kết nối PC = gửi tín hiệu thông qua kết nói có dây và không dây. Để device kết nối PC => cần có connection point hoặc port. Nếu device chia sẽ = tập dây, kết nối gọi là bus. BUS là tập dây và giao thức xác định, chỉ rõ các message có thể được gửi qua wires.
+Device kết nối PC bằng cách gửi tín hiệu thông qua kết nốii có dây và không dây. Để device kết nối PC => cần có connection point hoặc port. Nếu device chia sẽ = tập dây, kết nối gọi là bus. BUS là tập dây và giao thức xác định, chỉ rõ các message có thể được gửi qua wires.
 
 Bus thường được sử dụng trong kiến trúc PC, với tốc độ, thông lượng, phương thức kết nối khác nhau.
 
@@ -24,7 +24,7 @@ Bus thường được sử dụng trong kiến trúc PC, với tốc độ, th�
 
 **Controller** là tập các các linh kiện điện tử, hoạt động trên port, bus, device. serial-port controller is a simple device controller.
 
-**Controller** có 1 hoặc nhiều thanh ghi cho việc lưu data, kiểm soát signal. Processor kết nối với controller = đọc ghi các bit lên thanh ghi. Giao tiếp xảy ra = sử dụng các chỉ thị IO xác định, truyền các byte hoặc word tới IO port address. IO instruction kích hoạt bus lines để lựa chọn thiết bị mong muốn, chuyển bit tới device register.
+**Controller** có 1 hoặc nhiều thanh ghi cho việc lưu data, kiểm soát signal. Processor kết nối với controller băng cách đọc ghi các bit lên thanh ghi. Giao tiếp xảy ra bằng cách sử dụng các chỉ thị IO xác định, truyền các byte hoặc word tới IO port address. IO instruction kích hoạt bus lines để lựa chọn thiết bị mong muốn, chuyển bit tới device register.
 
 <h3 align="center"><img src="../../03-Images/document/28.png"></h3>
 
@@ -38,8 +38,8 @@ I/O port bao gồm 4 loại thanh ghi, sử dụng thể hiện status, control,
 
 ## III. Poling - Tìm kiếm, tham dò
 
-- Giao thức tương tác giữ host và controller rất phức tạp, ta có thể hiểu đơn giản qua khái niệm bắt tay.
-- Giả sử 2 bits dùng để thể hiện quan hệ người cung cấp, người tiêu thụ (giữa controller và host). Controller thể hiện trạng thái thông qua busy bit trong status register. Controller set trạng busy bit khi nó đang thực hiện công việc khác và xóa bit này khi nó sẵn sàng thực hiện.
+- Giao thức tương tác giữa host và controller rất phức tạp, ta có thể hiểu đơn giản qua khái niệm bắt tay.
+- Giả sử 2 bits dùng để thể hiện quan hệ người cung cấp, người tiêu thụ (giữa controller và host). Controller thể hiện trạng thái thông qua busy bit trong status register. Controller set trạng thái busy bit khi nó đang thực hiện công việc khác và xóa bit này khi nó sẵn sàng thực hiện.
 
 - Host phát tín hiệu mong muốn sử dụng = command-ready bit trong command register. Host thiết lập command-ready bit khi commad có sẵn cho controller thực hiện.
 
@@ -48,7 +48,7 @@ I/O port bao gồm 4 loại thanh ghi, sử dụng thể hiện status, control,
   - 2. host thiết lập write bit trong command = register và ghi byte vào data-out register.
   - 3. Host thiết lập command-ready bit
   - 4. Khi controller nhận thấy command-ready bit được set, nó thiết lập busy bit
-  - 5. ontroller đọc command register và thấy write cmd. Nó sẽ đọc data-out register để lấy byte, thực hiện IO tói device
+  - 5. Controller đọc command register và thấy write cmd. Nó sẽ đọc data-out register để lấy byte, thực hiện IO tới device
   - 6. Controller xóa command-ready bit, xóa error bit trong status register để chỉ ra device I/O hoàn thành, xóa busy bit thể hiện tiến trình hoàn thành
 
 
@@ -58,13 +58,13 @@ I/O port bao gồm 4 loại thanh ghi, sử dụng thể hiện status, control,
 
 **Cơ chế hoạt động**:
 - CPU có 1 dây dòng yêu cầu ngắt (interrup-request line) – CPU sẽ chú ý mỗi khi thực hiện 1 chỉ thị
-- Khi CPU phát hiện controller gửi 1 tín hiệu trên dòng yêu cầu ngắt – CPU lưu 1 số trạng thái (con trỏ lệnh hiện hành) – nhảy tới thủ tục ngắt thuộc (interrupt-handler) đc cố định trong bộ nhớ
+- Khi CPU phát hiện controller gửi 1 tín hiệu trên dòng yêu cầu ngắt – CPU lưu 1 số trạng thái (con trỏ lệnh hiện hành) – nhảy tới thủ tục ngắt (interrupt-handler) đc cố định trong bộ nhớ
 
 - Bộ quản lý ngắt xác định nguyên nhân ngắt, thực hiện xử lý cần thiết, thực thi chỉ thị return from interrupt trả về CPU trạng thái thực thi trước khi ngắt
 
 ## V. Truy xuất bộ nhớ trực tiếp (Direct memory-access-DMA)
 
-- Đối với thiết bị có khối lượng truyền lớn như disk, nó sẽ lãng phí tài nguyên bộ xử lý để theo dõi bit trạng thái, đẩy dữ liễu vào thanh ghi theo từng byte.
+- Đối với thiết bị có khối lượng truyền lớn như disk, nó sẽ lãng phí tài nguyên bộ xử lý để theo dõi bit trạng thái, đẩy dữ liệu vào thanh ghi theo từng byte.
 - PC giảm gánh nặng cho CPU bằng chuyển 1 số công việc tới Controller có mục đích đặc biệt - bộ điều khiển truy xuất bộ nhớ trực tiếp (direct memory-access-DMA).
 
 - Để khởi tạo thao tác chuyển DMA:
@@ -91,6 +91,6 @@ Là vùng bộ nhớ nhanh quản lý các bản sao dữ liệu. Truy xuất t�
 
 Sự khác nhau giữa vùng đệm (Buffer) và vùng lưu trữ (Cache):
 - Buffer có thể giữ chỉ bản sao dữ liệu đã có
-- Cache trữ giữ vừa một bản sao trên thiết bị cho phép truy xuất nhanh, ghi nhanh (dữ liệu chưa update tới phân vùng lưu trữ).
+- Cache lưu trữ một bản sao trên thiết bị cho phép truy xuất nhanh, ghi nhanh (dữ liệu chưa update tới phân vùng lưu trữ).
 
 Vùng lưu trữ và vùng đệm có chức năng khác nhau nhưng đôi khi một vùng bộ nhớ có thể được dùng cho cả hai mục đích.

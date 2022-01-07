@@ -5,13 +5,14 @@
 
 <h3 align="center"><img src="../../03-Images/document/4.png"></h3>
 
-- Sự khác biệt giữa giữa 1 ổ đĩa hoặc phân vùng và hệ thống tập tin được lưu trữu trên đó là rất quan trọng. Một số chương trình(bao gồm chương trình tạo ra hệ thống tập tin) hoạt động trực tiếp trên các Sector thô của 1 ổ đĩa hay phân vùng., Nếu có 1 hệ thống tập tin tồn tại trên đó thì nó sẽ bị phá hủy hoặc hỏng hóc
-- Để một phân vùng hoặc ổ đĩa có thể sử dụng như một hệ thống tập tin thì nó cần được khởi tạo và các cấu trúc dữu liệu của kiểu tập tin đó sẽ được lưu vào ổ đĩa. Đây được gọi là ` quá trình tạo hệ thống tập tin`
+- Sự khác biệt giữa 1 ổ đĩa(phân vùng) và hệ thống tập tin được lưu trữu trên đó là rất quan trọng. Một số chương trình (bao gồm chương trình tạo ra hệ thống tập tin) hoạt động trực tiếp trên các Sector thô của 1 ổ đĩa hay phân vùng. Nếu có 1 hệ thống tập tin tồn tại trên đó thì nó sẽ bị phá hủy hoặc hỏng hóc
+- Để một phân vùng hoặc ổ đĩa có thể sử dụng như một hệ thống tập tin thì nó cần được khởi tạo và các cấu trúc dữu liệu của kiểu tập tin đó sẽ được lưu vào ổ đĩa. Đây được gọi là `quá trình tạo hệ thống tập tin`
 
-- Hầu hết các loại hệ thống tập tin UNIX đều có cấu trúc chung tương tự nhau, mặc dù các chi tiết cụ thể khác nhau khá nhiều. Các khái niệm chủ chốt là superblock, inode, data block, directory block và indirection block.
-  - Superblock: chưa các thông tin về hệ thống tập tin một cách tổng thể, chẳng hạn như kích thước của nó (thông tin chính xác ở đây phụ thuộc vào hệ thống tập tin)
+- Hầu hết các loại hệ thống tập tin UNIX đều có cấu trúc chung giống nhau, mặc dù các chi tiết cụ thể khác nhau khá nhiều. Các khái niệm chủ chốt là superblock, inode, data block, directory block và indirection block.
+  - Superblock: chứa các thông tin về hệ thống tập tin một cách tổng thể, chẳng hạn như kích thước của nó (thông tin chính xác ở đây phụ thuộc vào hệ thống tập tin)
   - Inode: chứa tất cả các thông tin về một tập tin, ngoại trừ tên của nó. Tên được lưu trữ trong thư mục, cùng với số lượng lớn các inode. Mục nhập thư mục bao gồm tên tập tin và các số lượng inode đại diện cho tập tin đó. Inode chứa khối lượng lớn các khối dữ liệu, được sử dụng để lưu trữ dữ liệu trong tập tin.
   - Data block: đây là nơi dữ liệu được lưu trữ
+
 # Phần II. Các Loại filesystem phổ biến trên Linux
 
 Các loại filesystem được linux hỗ trợ
@@ -67,9 +68,9 @@ Các thư mục được mô tả như sau:
 ## Tổ chức logic của hệ thống tập tin Linux
 **Các kiểu tập tin trong Linux**
 - `Tập tin regular` là tập tin chỉ chứa dữ liệu. Dữ liệu có thể là một chương trình, một tập tin text, mã nguồn hay bất kỳ nội dung nào khác
-- Directory: Tương tự như regular, nó chứa một bộ các byte dữ liệu, như ở đây, dữ liệu chỉ giới hạn là một danh sách các tập tin khác, đó là nội dung của thư mục. Không có giới hạn về kiểu tập tin mà một thư mục có thể chứa đựng
+- `Directory`: Tương tự như regular, nó chứa một bộ các byte dữ liệu, như ở đây, dữ liệu chỉ giới hạn là một danh sách các tập tin khác, đó là nội dung của thư mục. Không có giới hạn về kiểu tập tin mà một thư mục có thể chứa đựng
 - `Charater device` và `block device`: Các chương trình Linux giao tiếp với các thiết bị phần cứng thông qua hai kiểu tập tin đặc biệt gọi là character device và block device. Các tập tin character device tham chiếu đến các trình điều khiển thiết bị muốn thực hiện các thao tác nhập/xuất bộ đệm như là terminal. Các tập tin block device được liên kết với các trình điều khiển thiết bị thực hiện các thao tác nhập/xuất chỉ trong phạm vi những đoạn lớn 512 hay 1024 byte và muốn nhân hệ điều hành thực hiện bộ đệm cho chúng. Một số kiểu của phần cứng như là đĩa có thể đại diện cho cả hai kiểu tập tin character device và block device.
 - `Domain socket`: Được kết nối giữa các tiến trình và cho phép chúng truyền thông với nhau một cách nhanh chóng và tin cậy. Có nhiều kiểu khác nhau của domain socket, phần lớn chúng được sử dụng trong giao tiếp mạng.
 - `Name pipes`: Cho phép truyền thông và giao tiếp giữa hai tiến trình không có quan hệ chạy trên cùng một máy.
-- `Hard link`: Thực sự không phải là một kiểu tập tin, mà là một tập tin 'liên kết' với tập tin khác. Mỗi tập tin có ít nhất một hard link. Khi một hard link mới được tạo cho một tập tin, một tên hiệu (alias) cho tập tin đó sẽ được tạo. Nội dung của hard link và tập tin nó liên kết tới luôn giống nhau. Khi thay đổi nội dung của hard link, nội dung của tập tin mà nó liên kết tới cũng thay đổi, và ngược lại.
+- `Hard link`: Thực sự không phải là một kiểu tập tin, mà là một tập tin `liên kết` với tập tin khác. Mỗi tập tin có ít nhất một hard link. Khi một hard link mới được tạo cho một tập tin, một tên hiệu (alias) cho tập tin đó sẽ được tạo. Nội dung của hard link và tập tin nó liên kết tới luôn giống nhau. Khi thay đổi nội dung của hard link, nội dung của tập tin mà nó liên kết tới cũng thay đổi, và ngược lại.
 - `Symbolic link`: Là một tập tin chỉ chứa tên của tập tin khác. Khi nhân hệ điều hành mở hoặc duyệt qua một symbolic link, nó được dẫn đến tập tin mà symbolic link chỉ đến thay vì chính bản thân của symbolic link. Sự khác nhau cơ bản giữa hard link và symbolic link là hard link là tham chiếu trực tiếp, trong khi đó symbolic link là một tham chiếu bởi tên tập tin

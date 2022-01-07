@@ -27,7 +27,7 @@ Tuy thuộc vào kiến trúc, logical file system có thể gọi file-organiza
 
 Khi file được tạo, để sử dụng cho hoạt động IO - Nó phải cần được mở. Lời gọi Open() truyền filename tới logical file system – hàm được gọi đầu tiên, tìm kiếm system-wide open-file table để kiểm tra file có đang được sử dụng bởi tiến trình khác.
   - Nếu mở, per-process open-file table entry tạo con trỏ tới existing system-wide open-file table (tiết kiệm không gian bộ nhớ)
-  - Nếu không, tìm kiếm trong direc structure theo file name. 1 phần direc structure được cached trong memo để tăng tốc hđh OS.
+  - Nếu không, tìm kiếm trong direc structure theo file name. 1 phần direc structure được cached trong memory để tăng tốc hđh OS.
 
 Khi file tìm thấy, FCB tạo bản sao tới `system-wide open-file table` trong memory. Table không chỉ lưu FCB, nó còn theo dõi số process đang sử dụng file.
 

@@ -2,7 +2,7 @@
 
 # Tổng quan
 
-Các thông tin này cần được truy xuất và đọc vào bộ nhớ máy tính để xử lý. Thông tin trong tập tin có thể được truy xuất bằng nhiều cách.
+Các thông tin cần được truy xuất và đọc vào bộ nhớ máy tính để xử lý. Thông tin trong tập tin có thể được truy xuất bằng nhiều cách.
 
 ### Truy xuất tuần tự
 - Phương pháp đơn giản nhất, Thông tin trong tập tin được xử lý có thứ tự
