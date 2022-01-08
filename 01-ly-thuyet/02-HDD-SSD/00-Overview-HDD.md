@@ -2,10 +2,10 @@
 
 ## I. Giới thiệu
 
-- Ổ đĩa cứng hay còn là Hard Disk Drive, viết tắt: HDD. Thiết bị dùng để lưu trữ dữ liệu trên bề mặt các tấm đĩa hình tròn phủ vật liệu từ tính.
-- Ổ đĩa cứng là loại bộ nhớ "không thay đổi" (non-volatile), không bị mất dữ liệu khi ngừng cung cấp nguồn điện cho chúng
-- Ổ đĩa cứng là một khối duy nhất, các đĩa cứng được lắp ráp cố định trong ổ ngay từ khi sản xuất nên không thể thay thế được các "đĩa cứng" như với cách hiểu như đối với ổ đĩa mềm hoặc ổ đĩa quang.
-
+- Ổ đĩa cứng hay còn là Hard Disk Drive, viết tắt: HDD
+- Đây là thiết bị dùng để lưu trữ dữ liệu có bề mặt là các tấm đĩa tròn được phủ vật liệu từ tính
+- Ổ đĩa HDD là loại ổ đĩa không thay đổi, không mất dữ liệu khi mất nguôn điện 
+- Ổ đĩa cứng HDD được lắp ráp cố định từ khi sản xuất và không thể thay thế như đối với ổ đĩa mềm hoặc ổ đĩa quang.
 ## II. Cấu tạo
 Ổ đĩa cứng gồm các thành phần, bộ phận có thể liệt kê cơ bản và giải thích sơ bộ như sau:
 ### 1. Cụm đĩa
@@ -24,19 +24,19 @@ Bao gồm toàn bộ các đĩa, trục quay và động cơ.
 - Bộ nhớ đệm (cache hoặc buffer): là nơi tạm lưu dữ liệu trong quá trình đọc/ghi dữ liệu. Dữ liệu trên bộ nhớ đệm sẽ mất đi khi ổ đĩa cứng ngừng được cấp điện.
 - Đầu cắm nguồn cung cấp điện cho ổ đĩa cứng.
 - Đầu kết nối giao tiếp với máy tính.
-- Các cầu đấu thiết đặt (tạm dịch từ jumper) thiết đặt chế độ làm việc của ổ đĩa cứng: Lựa chọn chế độ làm việc của ổ đĩa cứng (SATA 150 hoặc SATA 300) hay thứ tự trên các kênh trên giao tiếp IDE (master hay slave hoặc tự lựa chọn), lựa chọn các thông số làm việc khác...
+- Các cầu đấu thiết lập (tạm dịch từ jumper) thiết lập chế độ làm việc của ổ đĩa cứng: Lựa chọn chế độ làm việc của ổ đĩa cứng (SATA 150 hoặc SATA 300) hay thứ tự trên các kênh trên giao tiếp IDE (master hay slave hoặc tự lựa chọn), lựa chọn các thông số làm việc khác...
 
 ### 4. Vỏ đĩa cứng
 Phần đế chứa các linh kiện gắn trên nó, phần nắp đậy lại để bảo vệ các linh kiện bên trong.
 
 Chức năng:
-  - Định vị các linh kiện và đảm bảo độ kín khít để không cho phép bụi được lọt vào bên trong của ổ đĩa cứng.
-  - chịu đựng sự va chạm (ở mức độ thấp) để bảo vệ ổ đĩa cứng.
+  - Định vị các linh kiện và đảm bảo không cho phép bụi được lọt vào bên trong của ổ đĩa cứng.
+  - Có khả năng chịu đựng va chạm ở mức độ thấp
 
 ### 5. Đĩa từ
 <h3 align="center"><img src="../../03-Images/document/31.png"></h3>
 
-- **Đĩa từ**(platter): Đĩa thường cấu tạo bằng nhôm hoặc thuỷ tinh, trên bề mặt được phủ một lớp vật liệu từ tính là nơi chứa dữ liệu. Sử dụng một hoặc cả hai mặt trên và dưới. Số lượng đĩa có thể nhiều hơn một, phụ thuộc vào dung lượng và công nghệ của mỗi hãng sản xuất khác nhau.
+- **Đĩa từ**(platter): Đĩa thường cấu tạo bằng nhôm hoặc thuỷ tinh, trên bề mặt được phủ một lớp từ tính và là nơi chứa `dữ liệu`. Sử dụng một hoặc cả hai mặt trên và dưới. Số lượng đĩa có thể nhiều hơn một, phụ thuộc vào dung lượng và công nghệ của mỗi hãng sản xuất khác nhau.
 - **Track**: Trên một mặt làm việc của đĩa từ chia ra nhiều vòng tròn đồng tâm thành các track.
 - **Sector**:
   - Trên track chia thành những phần nhỏ bằng các đoạn hướng tâm thành các sector. Các sector là phần nhỏ cuối cùng được chia ra để chứa dữ liệu. Theo chuẩn thông thường thì một sector chứa dung lượng 512 byte.
