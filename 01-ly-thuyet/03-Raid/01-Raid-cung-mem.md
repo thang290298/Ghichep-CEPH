@@ -3,7 +3,7 @@
 # I. Raid Cứng
 
 - RAID cứng thiết lập mảng đĩa cho hệ điều hành sẵn trước khi cài đặt hệ điều hành
-- RAID cứng: khi hệ điều hành sử dụng không tốn tài nguyên cho việc quản lý đĩa... liên quan đến RAID
+- RAID cứng: khi hệ điều hành sử dụng không tốn tài nguyên cho việc quản lý đĩa liên quan đến RAID
 - RAID cứng chỉ hỗ trợ một định dạng ổ cứng hay khi thiết lập yêu cầu phần cứng khắt khe hơn và không thực hiện được với các ổ cứng bình thường như ATA
 
 **Ưu điểm:**

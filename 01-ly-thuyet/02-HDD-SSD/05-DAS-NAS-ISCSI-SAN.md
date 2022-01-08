@@ -1,9 +1,15 @@
 <h1 align="center">Hệ Thống Lưu Trữ DAS, NAS, SAN, ISCSI SAN</h1>
 
-Tìm hiểu các khái niệm về Strorage (lưu trữ) để có thể lưu trữ dữ liệu của bạn một cách an toàn nhất có thể. Netsa tổng hợp cho bạn các dạng lưu trữ hệ thống lưu trữ dùng cho máy chủ ảo (VPS) hoặc máy chủ riêng (Dedicated Server) như DAS, NAS, SAN, iSCSI SAN …
+- Tìm hiểu các khái niệm về Strorage (lưu trữ) để có thể lưu trữ dữ liệu một cách an toàn nhất có thể. 
+- Netsa tổng hợp  các dạng lưu trữ hệ thống lưu trữ dùng cho máy chủ ảo (VPS) hoặc máy chủ riêng (Dedicated Server) như DAS, NAS, SAN, iSCSI SAN …
 
 ## I. Direct Attached Storage (DAS)
-- Direct attached storage (DAS) là cách lưu trữ mà chúng ta đã quen biết từ lâu, đó là các ổ cứng SCSI gắn bên trong các máy chủ. Các ứng dụng có thể truy cập vào ổ cứng gắn trong ở mức độ block-level hay file-level. Thích hợp cho mọi nhu cầu nhỏ đến cao cấp nhất và khả năng chạy cũng cực nhanh .
+
+- Direct attached storage (DAS) là cách lưu trữ phổ thông được sử dụng trên các thiết bị máy tính là các ổ cứng SCSI gắn bên trong các máy chủ.
+
+- Các ứng dụng có thể truy cập vào ổ cứng gắn trong ở mức độ block-level hay file-level. Thích hợp cho mọi nhu cầu nhỏ đến cao cấp nhất và khả năng chạy cũng cực nhanh .
+
+
 <h3 align="center"><img src="../../03-Images/document/39.png"></h3>
 - Một server gắn những ổ cứng HDD và SSD bên trong, 1 client và các HDD bên trong quy xuất dữ liệu trực tiếp thì đó gọi là DAS
 
