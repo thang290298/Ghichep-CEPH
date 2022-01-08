@@ -1,19 +1,19 @@
 <h1 align="center">Tổng quan về SSD</h1>
 
 ## I. Giới thiệu
+
+- **`SSD`** (Solid State Drive) là một loại phương tiện lưu trữ dữ liệu liên tục trên bộ nhớ flash trạng thái rắn. Hai thành phần chính tạo nên một ổ SSD: bộ điều khiển flash và chip nhớ flash NAND.
+
 - Ổ cứng thể rắn hoặc Ổ lưu trữ bán dẫn là một thiết bị lưu trữ sử dụng bộ nhớ flash để lưu trữ dữ liệu trên máy tính một cách bền vững.
 - Một ổ SSD đồng thời mô phỏng quá trình lưu trữ và truy cập dữ liệu giống như ổ đĩa cứng (HDD) thông thường và do đó dễ dàng được sử dụng cho nhiều mục đích khác nhau.
 - Ổ SSD sử dụng SRAM hoặc DRAM hoặc bộ nhớ Flash để lưu dữ liệu, không nên nhầm lẫn với RAM Disk là một công nghệ mô phỏng và lưu dữ liệu trên RAM.
 
-## II. Đặc tính
+- Ổ cứng SSD không chỉ cải thiện về tốc độ đọc ghi dữ liệu so với đĩa cứng HDD. Ngoài ra SSD hỗ trợ người dùng cải thiện nhiệt độ, an toàn dữ liệu và điện năng tiêu thụ.
 
-- Sử dụng RAM để lưu dữ liệu, hoạt động đọc/ghi dữ liệu của SSD không kéo theo sự chuyển động của bất cứ phần nào trên ổ đĩa và do đó làm ổ đĩa bền vững hơn so với HDD, gần như không gây tiếng ồn, không có độ trễ cơ học nên mang lại tốc độ truy cập cao hơn. Đồng thời không mất thời gian khởi động như ổ HDD
 
-- Ngoài ra, nhờ không sử dụng đầu đọc cơ học để truy cập dữ liệu, SSD tiêu tốn ít điện năng hơn HDD và có thể hoạt động ở điện áp thấp hơn so với HDD, kích thước gọn hơn. Do đó, nó được sử dụng trong nhiều máy tính điện áp thấp.
+## II. Cấu tạo ổ cứng SSD
 
-## III. Cấu tạo ổ cứng SSD
-
-- Ssd được xây dựng lên từ nhiều chip nhớ flash NOR và bộ nhớ NAND flash. SSD được làm hoàn toàn bằng linh kiện điện tử và không có bộ phận chuyển động vật lý như trong ổ đĩa cứng. Những con chip flash sẽ được lắp cố định trên một bo mạch chủ khoảng từ 10-60 NAND của hệ thống. Trên card PCI hoặc cũng có thể là lắp vào trong một chiếc hộp có hình dạng và kích thước giống như ổ cứng nhưng nhỏ hơn.
+- SSD được xây dựng lên từ nhiều chip nhớ flash NOR và bộ nhớ NAND flash. SSD được làm hoàn toàn bằng linh kiện điện tử và không có bộ phận chuyển động vật lý như trong ổ đĩa cứng. Những con chip flash sẽ được lắp cố định trên một bo mạch chủ khoảng từ 10-60 NAND của hệ thống. Trên card PCI hoặc cũng có thể là lắp vào trong một chiếc hộp có hình dạng và kích thước giống như ổ cứng nhưng nhỏ hơn.
 
 <h3 align="center"><img src="../../03-Images/document/32.png"></h3>
 
