@@ -1,4 +1,4 @@
-<h1 align="center">Cấu hình LVM cơ bản</h1>
+<h1 align="center">Thác tác cơ bản trên LVM</h1>
 
 # Phần I. Chuẩn bị
 - thiết lập chuẩn bị 1 VM có thông số cấu hình như sau:
