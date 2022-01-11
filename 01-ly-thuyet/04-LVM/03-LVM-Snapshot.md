@@ -81,3 +81,13 @@ root@node1-ctl:/lvmlab# pvs
 > khi dữ liệu thay đổi , dung lượn file snapshot sẽ thay đổi theo
 
 - Nếu LVM bị đầy, snapshot sẽ tự động xóa
+
+
+# IV. Mở rộng Snapshot LVM
+
+- Nếu cần mở rộng kích thước Snapshot thực hiện lệnh sau:
+```sh
+lvextend -L +1G /dev/LVM_volume1/lv-lab-snapshot
+```
+
+<h3 align="center"><img src="../../03-Images/document/69.png"></h3>
