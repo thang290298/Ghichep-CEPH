@@ -3,7 +3,7 @@
 ## Mục lục
 - Phần I. [Giới thiệu](#gioithieu)
 
-- Phần II. [Lịch sử hình thành](#history)
+- Phần II. [CEPH và giải pháp](#giaiphap)
 
 
 ## I. <a name="gioithieu"></a>Giới thiệu
@@ -12,11 +12,30 @@
 
 - **`CEPH`** là một project cung cấp giải pháp về Storage data. CEPH cung cấp hệ thông lưu trữ phân tán mạnh mẽ, có tính mở rộng, hiệu năng cao, khả năng chịu lỗi cao. CEPH được thiết kể  với khả năng mở rộng cao, hỗ trợ lưu trữ tới mức exabyte cùng tính tương thích cao với các phần cứng có sẵn
 
-## II. <a name="history"></a>Lịch sử hình thành
+- Nguyên tắc cơ bản của CEPH:
+  - Có thể mở rộng tất cả các thành phần
+  - Khả năng chịu lỗi cao
+  - Giải pháp sử dụng phần mềm mã nguồn mở, tính thích nghi cao
+  - Tương thích với mọi phần cứng.
 
-- Argonaut 03-07-2012 team Ceph đã phát triển và released bản Argonaut, bản phát hành `ổn định` lớn đầu tiên của Ceph. Bản phát hành này sẽ chỉ nhận được các bản sửa lỗi ổn định và cập nhật hiệu suất và các tính năng mới sẽ được lên lịch cho các bản phát hành trong tương lai.
-- Bobtail (v0.56) 01-01-2012 team Ceph đã phát triển và released bản Bobtail, bản phát hành `ổn định` lần thứ 2 của Ceph. Bản phát hành này tập trung chủ yếu vào sự ổn định, hiệu suất và khả năng nâng cấp từ sự ổn định Argonaut trước đó (v0.48.x).
+- CEPH xây dựng kiến trúc mạnh mẽ, khả năng mở rộng không giới hạn, hiệu năng cao, giải pháp thống nhất, nên tảng lưu trữ mạnh mẽ cho doanh nghiệp, cắt giảm chi phí cho các thiết bị phần cứng đắt đỏ
 
-- Cuttlefish (v0.61) 07-05-2013 team Ceph đã phát triển và released bản Cuttlefish, bản phát hành `ổn định` lần thứ 3 của Ceph. Bản phát hành này bao gồm một số cải tiến về tính năng và hiệu suất cũng như là bản phát hành ổn định đầu tiên có công cụ triển khai 'ceph-deploy' để thay đổi phương thức triển khai `mkcephfs` trước đó.
+- Ceph cung cấp giải pháp lưu trữ dựa trên block, file, object, và cho phép tùy chỉnh theo ý muốn
 
-- Dum
+- Tất cả các kiểu dữ liệu, block, file đều được lưu dưới dạng object, quản trị bởi Ceph cluster. Object storage hiện đã trở thành giải pháp cho hệ thống lưu trữ truyền thống, cho phép xây dựng kiến trúc hạ tầng độc lập với phần cứng. Tại Ceph, object sẽ không tồn tại đường dẫn vật lý, khiến obj linh hoạt khi lưu trữ, tạo nền tảng mở rộng tới hàng petabyte-exabyte.
+
+<h3 align="center"><img src="../../03-Images/document/74.png"></h3>
+
+## II. <a name="giaiphap"></a>CEPH và giải pháp
+
+### 1. <a name="CloudStorage"></a>CEPH - Giải Pháp Cloud Storage
+
+- CEPH Storage là thành phần quan trong để lưu trữ và phát triển các dịch vụ Cloud. Các giải pháp lưu trữ truyền thống gặp các vấn đề về chi phí,kiến trúc, khả năng mở rộng và nâng cấp hệ thống
+
+- CEPH hỗ trợ rất tốt trên các nên tảng OpenStack, CloudStack, OpenNebula
+
+### 2. <a name="Defined"></a>CEPH - Giải Pháp Defined
+
+- Software-defined Storage (SDS) là giải pháp hỗ trợ cắt giảm chi phí, cung cấp được các giải pháp cho khách hàng có sẵn hạ tầng lớn
+
+### 3. <a name="1"></a>CEPH - Giải Pháp Pháp Lưu Trữ Thống Nhất
