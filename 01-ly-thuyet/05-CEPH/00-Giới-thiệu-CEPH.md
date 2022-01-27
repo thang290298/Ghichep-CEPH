@@ -46,3 +46,26 @@
 - Tất cả block hay file storage được lưu trữ trong 1 đối tượng thông minh từ CEPH
 
 - CPEH quản lý object,block,file storage. Object được lưu trữ riêng biệt và được hỗ trợ mở rộng không giới hạn thông qua lược bỏ metadata. Để thực hiện điều đó, ceph dùng thuật toán động để tính toán, tiềm kiếm dữ liệu và lưu trữ
+
+<h3 align="center"><img src="../../03-Images/document/75.png"></h3>
+
+
+
+
+### 4. <a name="2"></a>Giải Pháp Lưu Trữ Khối – Ceph Block Storage
+
+- Lưu trữ khối là phướng thức lưu trũ truyền thống trong mạng lưu trữ (SAN). Ở phương thức này dữ liệu được lưu trữ dưới dạng các ổ ảo trên các khối và được trừu tượng hóa tại các node. Ở giải pháp khối, các ổ đĩa ảo sẽ được map tới hệ điều hành và kiểm soát đến filesystem layout.
+
+
+- Giải pháp RBD (Ceph Block Device) cung cấp các ổ đĩa ảo giống với SAN. Hướng đến 1 giải pháp toàn diện RBD cung cấp sự đảm bảo, tính phân phối, hiệu năng cao trên block storage disk tại mỗi client
+
+- RBD chia thành nhiều object, phân tán trên toàphaaEPH cluster cung cấp tính đảm bảo và hiệu năng cao. RBD hỗ trợ đến mức Linux Kennel và được tích hợp sẵn với nhân Linux Kennel, cung cấp khả năng snapshot tốc độ cao, nhẹ, copy-on-write cloning và kèm theo nhiều phương pháp. Hỗ trợ in-memory caching, nâng cao hiệu năng. Ceph RBD hỗ trợ image size tới 16EB
+
+- Image có thể được cung cấp dưới dạng ổ đĩa ảo, máy ảo. Các công nghệ KVM,ZEN hỗ trợ đày đủ RBD và xử lý, lưu trữ trên VM. Ceph black hỗ trợ đầy đủ trên các nền tảng ảo hóa mới OpenStack, CloudStack, v.v.
+
+
+<h3 align="center"><img src="../../03-Images/document/76.png"></h3>
+
+### 5. <a name="3"></a>Hệ thống tệp mới – Ceph Filesystem
+
+- Hệ thống tệp của Ceph (Ceph filesystem hay CephFS) là hệ thông tương thích mức POSIX, được sử dụng để lưu trữ dữ liệu người dùng. CEPHFS hỗ trợ tốt Linux Kennel driver cho nên tương thích hỗ trợ tốt trên nhiều nên tảng Linux OS. 
