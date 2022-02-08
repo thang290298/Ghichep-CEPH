@@ -79,3 +79,36 @@
 
 - Hoạt động của CEPH OSD bên trên ổ đĩa vật lý có phân vùng bên trong linux partition. Linux partition có thể là Btrfs(B-tree file system), XFS hay ext4. Đối với mỗi filesysystem sẽ có một đặc điểm riêng biệt
   - Btrfs: Cung cấp hiệu năng tốt nhất khi so sánh với XFS, EXT4. Hỗ trợ các công nghệ mới nhất(copy-on-write, writable snapshots, vm provisioning, cloning). Hiện tại  Btrfs vẫn chưa ổn định trên một số nên tảng
+  - XFS: Mạng lại sự tin cậy, ổ định đối với filesystem. được khuyên dùng đối với hệ thống Ceph cluster và đang được sử dụng nhiều nhất trên Ceph Storege. Nhưng vẫn có một số đặc điểm kém với Btrfs (XFS chạy chậm hơn Btrfs vì XFS thuộc loại Journaling Filesystem) và một số vấn đề về hiện suất khi mở rộng metadata
+  - Ext4: Fourth Extended Filesystem, thuộc Journaling Filesystem và có hỗ trợ CEPH Storage, tuy nhiên về độ thân thiên chưa bằng XFS và hiện năng không cao bằng Btrfs.
+
+- CEPH OSD sử dụng các thuộc tính mở rộng của FS để biết trạng thái của Object lưu trữu metadata. XATTRs cho phép lưu trữ thông tin mở rộng liên quan đến object dưới dạng xattr_name và xattr_value,cung cấp tagging objects với nhiều thông tin metadata hơn.
+
+
+- Ext4 không cung cấp đầy đủ các tính năng XATTRs dẫn đến một số hạn chế về bytes lưu trữ XATTRs dẫn đến không thân thiện và tối ưu khi sử dụng cho filesystem, đồng thời Btrfs và XFS cũng hỗ trợ khả năng lưu trữ lớn hơn
+
+## 4. Ceph OSD Journal
+
+- Ceph sử dụng journaling filesystems như Btrfs, XFS cho OSD.
+- Trước khi dữ liệu được đẩy đến backing store, Ceph ghi  dữ liệu đến một phân vùng đặc biệt gọi là `journal`. Đây là một phân vùng ảo tách biệt trên ổ đĩa HDD hay phân vùng ổ SSD, cũng có thể là một file bên trên FS. Ceph ghi tất cả tới jounal và sau đó mới lưu trữ tới backing storage.
+
+<h3 align="center"><img src="../../03-Images/document/81.png"></h3>
+
+- `journal` có size cơ bản là 10GB, có thể to hơn tùy vào phân vùng. journal có khả năng đảm bảo và tăng tốc độ truy vấn đọc ghi dữ liệu. Hoạt động ghi ngẫu nhiên được xử lý trên bộ nhớ các `journal` sau đó được đẩy sang FS tạo điều kiện filesystem có đủ thời gian đẻ ghi dữ liệu xuống ổ đĩa.
+
+
+- Hiệu suất journal được cải thiện khi thiết lập trên phân vùng SSD. tất cả các client sẽ được ghi xuống SSD journal sau đó đẩy xuống ổ đĩa. Sử dụng SSD journal cho phép OSD xử lý được khối lượng công việc lớn. tuy nhiên nếu  các journal chậm hơn Banking Store sẽ hạn chế hiệu năng của Cluster
+
+- Sử dụng tỷ lệ 4-5 OSD trên mỗi SSD journal, nếu vượt quá có thể sẽ gây ra hiện tượng ngõ cổ chai đối với cluster
+
+- Đối với trường hợp lỗi journal trong Btrfs-based filesystem sẽ giảm thiểu mất mát dữ liệu. Btrfs sử dụng kỹ thuật copy-on-write filesystem nên nếu nội dung `content block` thay đổi, việc ghi sẽ diễn ra riêng biệt. Trong trường hợp journal gặp lỗi, dữ liệu sẽ vẫn tồn tại.
+
+- Không sử dụng **`RAID`** cho CEPH vì sẽ làm giảm hiệu năng ổ cứng, nó khiển việc nhân bản dữ liệu diễn ra 2 lần và chiếm tài nguyên hệ thống. Nên sử dụng Raid 0 để bảo vệ dữ liệu, Ceph sẽ chịu trách nhiệm nhân bản, tái tạo dữ liệu thay vì sử dụng mode raid khác nên chọn CEPH có hiệu năng vượt trội hơn về khả năng khôi phục nhanh hơn, giảm chi phí đầu tư phần cứng. Đối với Raid 5,6 có hiệu năng cao hơn CEPH vì tính chất random IO(thuật toán CRUSH)
+
+## 5. Tiến Trình Giám Sát (Ceph Monitor)
+
+- Ceph monitor có nhiệm vụ giám sát toàn bộ Cluster. Tiến trình hoạt động hoàn toàn trên cluster, giám sát thông tin, trạng thái, cấu hình. CEPH monitor hoạt động dựa trên duy trì master copy trên cluster
+- Cluster map bao gồm OSD, PG, CRUSH, MDS maps
+
+- Tất cả các map  được biết đến bên trong cluster map
+  - Monitor map: Chứa thông tin về monitor node bao gồm Ceph cluster IP, monitor hostname, and IP address và port number. Nó cũng lưu trữ map creation và thông tin thay đổi cuối cùng.
