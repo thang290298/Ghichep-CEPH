@@ -45,4 +45,37 @@
 - Cung cấp POSIX-compliant, phân phối filesystem
 - CephFS dựa trên Ceph MDS để thể hiện tính phân cấp file, metadata.
 
-# Phần I. Các thành phần chính
+# Phần II. Các thành phần chính
+## 1. CEPH RADOS
+- RADOS ( Reliable Automatic Distributed Object Storage) là trung tâm của Storage system và được gọi là Ceph Storage cluster. RADOS cung cấp các tính năng quan trọng như: phân bổ lưu trữ đối tượng, HA, bảo đảm, chịu lỗi, tự xử lý và giám sát
+
+> RADOS layer có vai trò quan trọng bên trong kiến trực Ceph storage
+
+
+- Các phương thức truy cập trên RBD,CephFS,RADOAGW,librados tất cả đều hoạt động trên RADOS layer. Khi Ceph Cluster tiếp nhận yêu cầu đọc ghi dữ liệu từ client, thuật toán CRUSH sẽ tính toán vị trí dữ liệu được lưu trữ
+- Dựa trên CRUSH thì RADOS sẽ phân bổ dữ liệu đến tất cả node thuốc cluster vào trong các đối tượng, và cuối cùng các đối tượng sẽ được lưu trữ đến các OSD. RADOS có trách nhiệm tổ chức, đảm bảo khi cấu hình và có nhiều hơn 1 lần nhân bản dữ liệu
+
+- Tại cùng thời điểm, RADOS sẽ nhận bản object và lưu trữ tại phân vùng khác. Để có mức đảm bảo cao cần tùy chỉnh tập luật của CRUSH theo yêu cầu và nền tảng hạ tầng
+- Trong trường hợp có sai sót, object sẽ được khổi phục dựa trên các bản sao, tính năng khôi phục dữ liệu tự động vì Cepg rados có tính năng tự khôi phục, tự sửa lỗi
+
+- Khi nhìn vào kiến trúc CEPH sẽ có 2 phần , RADOS là tâng dưới , nằm beentrong Ceph Cluster và không giao tiếp trực tiếp đến client, bên trên có các client interface.
+
+## 2. Tiến Trình Lưu Trữ Đối Tượng (Ceph Object Storage Device – OSD)
+
+- Đây là thành phần thực hiện lưu trữ dữ liệu đến đến các thiết bị lưu trữ dữ liệu vật lý tại mỗi node dưởi dạng object. Phần lớn các hoạt động lưu trữ bên trong Ceph cluster được thực hiện bởi tiến trình Ceph OSD. CEPH OSD lưu trữ dữ liệu tất cả người dùng ở dạng object và bên trong Ceph bao gồm nhiều OSD
+
+- Yêu cầu đọc/ghi dữ liệu từ người dùng tới cluster map từ các tiến trình giám sát được điều hướng đến OSD để thực hiện đọc ghi dữ liệu, từ đó người dùng làm việc trực tiếp với OSD mà không thông qua các tiến trình giám sát, điều này làm tăng hiệu năng và tốc độ đọc ghi dữ liệu. Cơ chế " data-storage-and-retrieval mechnisim" gần như là đọc nhất khi so sánh ceph đối với các giải pháp tương tự
+
+- Mỗi Object trong OSD đều có các phiên bản chính và bản sao năm trên các OSD khác nhau. Vì Ceph lưu trữ phân tán nên các object được lưu trữu trên nhiều OSD, mỗi một OSD sẽ chứa một bản chính và một bản phụ. khi xay ra lỗi ổ đĩa, CEPH OSD daemon sẽ tiến hành so sánh các OSD để thực hiện khôi phục
+
+- Tại thời điểm khôi phục dữ liệu bản sao sẽ trở thành bản chính và tạo ra bản sao mới trên OSD khác trong thời điểm khôi phục. tuy nhiên OSD hỗ trợ tùy chỉnh và cho phép 1 OSD trên mỗi hót, ỏ đũa và raid volume.Hầu hết khi triển khai Ceph trong JBOD environment sẽ sử dụng mỗi OSD daemon trên mỗi ổ đĩa vật lý.
+
+## 3. Hệ Thống Tệp Trên Ceph OSD
+
+<h3 align="center"><img src="../../03-Images/document/80.png"></h3>
+
+- CEPH OSD bao gồm các thành phần Ceph OSD filesystem, Linux filesystem và phía trên cùng là Ceph OSD service.
+- Linux filesystem có vai trò quan trọng trong tiến trình Ceph OSD như hỗ trợ extended attributes ( XATTRs).XATTRs cung cấp các thông tin nội bộ về object state, snapshot, metadata, ACL tới OSD daemon, cho phép quản trị dữ liệu.
+
+- Hoạt động của CEPH OSD bên trên ổ đĩa vật lý có phân vùng bên trong linux partition. Linux partition có thể là Btrfs(B-tree file system), XFS hay ext4. Đối với mỗi filesysystem sẽ có một đặc điểm riêng biệt
+  - Btrfs: Cung cấp hiệu năng tốt nhất khi so sánh với XFS, EXT4. Hỗ trợ các công nghệ mới nhất(copy-on-write, writable snapshots, vm provisioning, cloning). Hiện tại  Btrfs vẫn chưa ổn định trên một số nên tảng
