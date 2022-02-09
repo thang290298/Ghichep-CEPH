@@ -112,3 +112,64 @@
 
 - Tất cả các map  được biết đến bên trong cluster map
   - Monitor map: Chứa thông tin về monitor node bao gồm Ceph cluster IP, monitor hostname, and IP address và port number. Nó cũng lưu trữ map creation và thông tin thay đổi cuối cùng.
+  - OSD map: Lưu trữ thông tin như cluster IP, sự tạo thành OSD map, thay đổi cuối cùng và một số thông tin khác như pool names, pool ID, type, relication level và placement groups. Ngoài ra cũng lưu thông tin OSD như count, state,state stamp, up and acting OSD sets, scrub details.
+  - CRUSH map: lưu giữ thông tin về các thiết bị trong cluster storage, cấu hình tầng storage, các rule khi lưu trữ dữ liệu
+  - MDS map: lưu thông tin về MDS map, map creation, modification timedata, metadata pool ID, cluster MDS count, và MDS state
+
+
+- CEPH MON không lưu trữ dữ liệu và phục vụ các user. Nó chỉ tập trung dữ liệu trên cluster map tại client và cluster node, client và user được kiểm tra định kỳ. Tiến trình giám sát rất nhẹ  nên không ảnh hướng đến tài nguyên trên server. Monitor cần có đủ dung lượng để lưu trữ cluster log bao gồm các thành phần OSD,MDS và monitor logs. CEPH Clustewr chưa nhiều hơn 1 monitoir node
+
+- Kiến trúc CEPH được thiết kế quorum và provides consensus khi đưa ra quyết định phân tán cluster bằng thuật toán `Paxos`. Số lượn Monitor trong cluster là số lẻ, tối thiểu 1-3 và sẽ có 1 node đứng ra hoạt động như 1 leader
+
+- Phiên bản thương mại cần ít nhất 3 node monitor cho HA. Tùy thuộc và chi phí mà tiến trình monitor có thể chạy trên cùng OSD, tuy nhiên sẽ cần nhiều CPU,RAM,DISK cho việc lưu trữ log.
+
+
+## 6. Librados
+
+- Đây là thư viện cho phép làm việc với RADOS, bỏ qua một số interface layer để làm việc với CEPH Cluster. Librados là thư viện cho RADOS cung cấp nhiều API và ủy quyền trực tiếp đến các ứng dụng, truy cập song song đến cluster, miễn phí http. CÓ thể mở rộng giao thức truyy cập đến RADOS, thư viện hỗ trợ nhiều ngôn ngữ như C++, Java, Python, Ruby, and PHP.
+
+- Librados phục vụ các tiến trình khác, hỗ trợ các giao diện với tính tương thích và tích hợp cao. Bao gồm: Ceph block device, Ceph filesystem và Ceph RADOS gateway. librados  hỗ trợ nhiều API tương tác trực tiếp tới object, tương tác trực tiếp ddeensd RADOS cluster. Library nâng cao hiệu năng, tính bảo đảm.
+
+## 7. Giải Pháp Lưu Trữ Khối (Ceph Block Storage)
+
+- Đây là thành phần quan trọng, sử dụng định dạng, lưu trữ dữ liệu trong môi trường doanh nghiệp. CEPH block device là RADOS block device (RBD), cung cấp giải pháp block storage tới physical hypervisor, cung cấp cho cá máy ảo. Ceph RBD drivẻ được tích hợp với Linux mainline kernel và hỗ trợ QEMU/KVM, cho phép Ceph block devoce seamlesly
+
+<h3 align="center"><img src="../../03-Images/document/82.png"></h3>
+
+- Linux host hỗ trợ Kernel RBD (KRBD) và maps Ceph block device sử dụng librados. Sau đó RADOS thực hiện lưu trữ Ceph block device object trên cluster dưới dạng phân tán đến các OSD. Khi Ceph block device được map đến Linux host ,  có thể sử dụng như một phân vùng RAW hoặc labelled với filesystem followed by mounting. RBD sử dụng thư viện librbd để tận dụng RADOS, cung cấp tính đảm bảo, phân tán và object-based block storage.
+
+- Khi client ghi dữ liệu đến RBD các thư viện librbd map dât block đến object được lưu trong Ceph Cluster, chia data object, nhân bản đến cluster, nâng cao tính đảm bảo, đáng tin cạy và hiệu năng. RBD phía trên hỗ trợ update trực tiếp tới object. Client có thể ghi , thêm , xóa trên object đã tồn tại làm RBD tối uuw giải pháp lưu trữ đối với các VM
+
+- Ceph RBD có đầy đủ sức mạnh và của SAN Storage, cung cấp giải pháp ở mức độ doanh nghiệp với các tính năng thin provisioning, copy-on-write snapshots, clones, revertible read-only snapshots, hỗ trợ cloud platforms như Openstack và Cloudstack.
+
+## 8. Giải Pháp Lưu Trữ Object (Ceph Object Gateway)
+
+- Ceph Object Gateway hay RADOS gatewaylà proxy chuyển đổi http requests thành RADOS requests và ngược lại, cung cấp RESTful object storage, tương thích với S3, Swift
+- Ceph Object Storage sử dụng Ceph Object Gateway daemon (radosgw) để tương tác librgw, Ceph Cluster và librados. Nó thực thi FastCGI module sử dụng libfcgi và có thể sử dụng FastCGI-caapable webserver
+
+- Ceph Object storage sử dụng 3 giao diện:
+  - S3 compatible
+  - Swift compatible
+  - Admin API
+
+
+<h3 align="center"><img src="../../03-Images/document/83.png"></h3>
+
+## 9. Ceph MDS
+
+- Ceph MDS tập trung vào Metadata Server và yêu cầu riêng cho CephFS, và một số storage methods block; object-based storage không yêu cầu MDS services
+- Ceph MDS cho phép client mount POSIX file system với bất kỳ size. MDS không phục vụi trực tiếp đến client, dũ liệu được phục vụ bởi OSD. MSD cung cấp hệ thống chia sẻ tệp liên tục với smart caching layer, vì thế giảm quá trình đọc ghi dwuxc liệu. MDS mở rộng lợi ích về chia nhỏ phân vunghf, single MDS cho một phần metadata.
+
+- MDS không lưu trữ dữ liệu nội bộ, ít cần thiết trong một số kịch bản. Nếu tiến trình MDS lỗi thì có thể chạy lại thông qua truy cập cluster.Tiến trình metadata server được cấu hình chủ động hoặc bị động.Node MDS chính sẽ trở thành active, phần còn lại sẽ chuyển sang chế độ chờ. Khi xảy ra lỗi primary MDS, node tiếp theo sẽ thay đổi trạng thái. Để nhanh chóng khôi phục, ta có thể chỉ định node nào sẽ trở thành active node, đồng thời lưu trữ dữ liệu giống nhau trong memory, chuẩn bị trước cho cache.
+
+## 10. Giải Pháp Hệ Thống Tệp (Ceph Filesystem)
+- CephFS cung cấp hệ thống thống tệp POSIX nằm trên RADOS sử dụng MDS đẻ quản trị metadata, tách biệt metadata khỏi dữ liệu, giảm phức tạp, nâng cao tính bảo đảm
+- CephFS thừa hưởng một số tính năng từ RADOS và cung cấp tính năng cân bằng động cho dữ liệu.
+
+<h3 align="center"><img src="../../03-Images/document/84.png"></h3>
+
+
+- Libcephfs nắm vai trò hỗ trợ thực thi client. Tương thích tốt với Linux kernel driver cho nên client có thể sử dụng filesystem để mount thông qua mount cmd.Nó tương thích với SAMBA, hỗ trợ CIFS và SMB. CephFS mở rộng hỗ trợ file systems trong user space (FUSE) thông qua cephfuse modules và cũng cho phép ứng dụng tương tác trực tiếp với RADOS cluster sẽ sử dụng các thư viện libcephfs.
+
+# Tài liệu tham khảo
+- https://blog.devopsviet.com/2020/03/15/ceph-phan-3-kien-truc-ceph/
