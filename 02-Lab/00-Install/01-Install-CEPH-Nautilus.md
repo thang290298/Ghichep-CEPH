@@ -1,29 +1,24 @@
-<h1 align="center">Cài đặt CEPH phiên bản Luminous</h1>
-
+<h1 align="center">Cài đặt CEPH phiên bản nautilus</h1>
 
 # Phần I. Chuẩn bị
 
 ## 1. Mô hình triển khai
 
-<h3 align="center"><img src="..\03-Images\Lab\12.png"></h3>
+<h3 align="center"><img src="..\..\03-Images\Lab\1.png"></h3>
 
 Trong đó:
   - Ba node CEPH: CentOS 7 - 64bit.
-  - Disk: Mỗi node CEPH có 2 Disk. 1 Disk cài OS, 1 Disk lưu trữ dữ liệu cho Client.
+  - Disk: Mỗi node CEPH có 4 Disk. 1 Disk cài OS, 3 Disk lưu trữ dữ liệu cho Client.
   - NICs:
     - `eth0`: SSH và cài đặt.
     - `eth1`: Kết nối thông tin giữa các node CEPH, đường cho clients kết nối.
     - `eth2`: Đồng bộ dữ liệu giữa các node CEPH.
-  - Phiên bản cài đặt: CEPH Luminous.
-
+  - Phiên bản cài đặt: CEPH Nautilus.
 
 ## 2. IP Planning
 
-| Hostname | hardware | Interface |
-|--------------|-------|------|
-| ceph-luminous1-admin | <ul><li>2 CPU - 2GB RAM</li><li>20GB Disk OS</li><li>40GB Disk DATA</li></ul>| <ul><li>eth0: 192.168.33.18  (MNGT)</li><li>eth1: 192.168.34.18 (CEPH_COM)</li><li>eth2: 192.168.35.18 (CEPH_REP)</li></ul>|
-| ceph-luminous2 | <ul><li>2 CPU - 2GB RAM</li><li>20GB Disk OS</li><li>40GB Disk DATA</li></ul>| <ul><li>eth0: 192.168.33.19  (MNGT)</li><li>eth1: 192.168.34.19 (CEPH_COM)</li><li>eth2: 192.168.35.19 (CEPH_REP)</li></ul>|
-| ceph-luminous3 |  <ul><li>2 CPU - 2GB RAM</li><li>20GB Disk OS</li><li>40GB Disk DATA</li></ul>| <ul><li>eth0: 192.168.33.20  (MNGT)</li><li>eth1: 192.168.34.20 (CEPH_COM)</li><li>eth2: 192.168.35.20 (CEPH_REP)</li></ul>|
+<h3 align="center"><img src="..\..\03-Images\Lab\2.png"></h3>
+
 
 # Phần II. Cài đặt
 ## 1. Thiết lập ban đầu
@@ -61,11 +56,9 @@ ln -f -s /usr/share/zoneinfo/Asia/Ho_Chi_Minh /etc/localtime
 
 ### Bước 4: Set hostname
 ```sh
-cat << EOF >> /etc/hosts
-192.168.34.18 ceph-luminous1-admin
-192.168.34.19 ceph-luminous2
-192.168.34.20 ceph-luminous3
-EOF
+echo "192.168.34.15 CEPH01" >> /etc/hosts
+echo "192.168.34.16 CEPH02" >> /etc/hosts
+echo "192.168.34.17 CEPH03" >> /etc/hosts
 ```
 
 ### Bước 5: Cài đặt CMDlog
@@ -96,9 +89,9 @@ ceph-deploy --version
 ```
 - Kết quả trả về:
 ```sh
-[root@ceph-luminous1-admin ~]# ceph-deploy --version
+[root@CEPH01 ~]# ceph-deploy --version
 2.0.1
-[root@ceph-luminous1-admin ~]#
+[root@CEPH01 ~]#
 ```
 ### Tạo key SSH
 ```sh
@@ -106,55 +99,56 @@ ssh-keygen
 ```
 - Kết quả: 
 ```sh
-[root@ceph-luminous1-admin ~]# ssh-keygen
+[root@CEPH01 ~]# ssh-keygen
 Generating public/private rsa key pair.
-Enter file in which to save the key (/root/.ssh/id_rsa): 
+Enter file in which to save the key (/root/.ssh/id_rsa):
 Created directory '/root/.ssh'.
-Enter passphrase (empty for no passphrase): 
-Enter same passphrase again: 
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
 Your identification has been saved in /root/.ssh/id_rsa.
 Your public key has been saved in /root/.ssh/id_rsa.pub.
 The key fingerprint is:
-SHA256:Ka+QFfhW3d3c11iSNcuT3ZiQMnru2MGMRB/oGTTdP78 root@ceph-luminous1-admin
+SHA256:ZKvszQ3vIJQLH2380vzrgrBFo/jahAl4VeI1dgZDnyM root@CEPH01
 The key's randomart image is:
 +---[RSA 2048]----+
-|       .oo ....+o|
-|     .  +o=.oooOO|
-|    . .o.=.+..==O|
-|     . o=.o   o o|
-|      =.S*     o |
-|     + o. =     .|
-|    o   .+ .    .|
-|     . .. o    E |
-|      .          |
+|    ..\..O.o        |
+|   . = * .       |
+|    o E *        |
+| . .   Boo       |
+|. o ..\..+oS.       |
+| . ..\..Bo=.+       |
+|    o.B++.+      |
+|     +o+.*..\..     |
+|    ..\..o o.+o+.   |
 +----[SHA256]-----+
-[root@ceph-luminous1-admin ~]#
+[root@CEPH01 ~]#
 ```
+
 - thực hiện `coppy` key sang các node khác.
 ```sh
-ssh-copy-id root@ceph-luminous1-admin
-ssh-copy-id root@ceph-luminous2
-ssh-copy-id root@ceph-luminous3
+ssh-copy-id root@CEPH01
+ssh-copy-id root@CEPH02
+ssh-copy-id root@CEPH03
 ```
 
 ### Tạo các thư mục ceph-deploy để thao tác cài đặt vận hành cluster
 ```sh
 mkdir /ceph-deploy && cd /ceph-deploy
 ```
-### Khởi tại file cấu hình cho cụm với node quản lý là `ceph-luminous1-admin`
+
+### Khởi tại file cấu hình cho cụm với node quản lý là ceph01
 ```sh
-ceph-deploy new ceph-luminous1-admin
+ceph-deploy new ceph01
 ```
 - Kiểm tra thông tin folder `ceph-deploy`
 ```sh
-[root@ceph-luminous1-admin ceph-deploy]# ll -alh
+[root@CEPH01 ceph-deploy]# ll -alh
 total 20K
-drwxr-xr-x   2 root root 4.0K Feb 10 09:08 .
-dr-xr-xr-x. 19 root root 4.0K Feb 10 09:07 ..
--rw-r--r--   1 root root  211 Feb 10 09:08 ceph.conf
--rw-r--r--   1 root root 3.1K Feb 10 09:08 ceph-deploy-ceph.log
--rw-------   1 root root   73 Feb 10 09:08 ceph.mon.keyring
-[root@ceph-luminous1-admin ceph-deploy]#
+drwxr-xr-x   2 root root 4.0K Dec 15 15:12 .
+dr-xr-xr-x. 19 root root 4.0K Dec 15 15:12 ..\..
+-rw-r--r--   1 root root  197 Dec 15 15:12 ceph.conf
+-rw-r--r--   1 root root 2.9K Dec 15 15:12 ceph-deploy-ceph.log
+-rw-------   1 root root   73 Dec 15 15:12 ceph.mon.keyring
 ```
 - trong thư mục bao gồm các file:
   - **`ceph.conf`**: File config được khởi tạo tự động
@@ -168,7 +162,7 @@ dr-xr-xr-x. 19 root root 4.0K Feb 10 09:07 ..
 ```sh
 cat << EOF >> /ceph-deploy/ceph.conf
 osd pool default size = 2
-osd pool default min size = 1ini
+osd pool default min size = 1
 osd crush chooseleaf type = 0
 osd pool default pg num = 128
 osd pool default pgp num = 128
@@ -177,6 +171,7 @@ public network = 192.168.34.0/24
 cluster network = 192.168.35.0/24
 EOF
 ```
+
 ### Cài đặt ceph trên toàn bộ các node ceph
 > Lưu ý: Nên sử dụng byobu, tmux, screen để cài đặt tránh hiện tượng mất kết nối khi đang cài đặt CEPH.
 
@@ -185,14 +180,16 @@ yum -y install byobu
 ```
  - tiến hành cài đặt trên các node
 ```sh
-ceph-deploy install --release luminous  ceph-luminous1-admin ceph-luminous2 ceph-luminous3
+ceph-deploy install --release nautilus CEPH01 CEPH02 CEPH03 
 ```
+
+> Quá trình cài đặt diễn tra trong khoảng 30 đến 60 phút để hoàn tất cài đặt trên 3 node CEPH
 
 ### kiểm tra phiên bản sau khi cài đặt
 ```sh
-root@ceph-luminous1-admin ceph-deploy]# ceph -v
-ceph version 12.2.13 (584a20eb0237c657dc0567da126be145106aa47e) luminous (stable)
-[root@ceph-luminous1-admin ceph-deploy]#
+[root@CEPH01 ceph-deploy]# ceph -v
+ceph version 14.2.22 (ca74598065096e6fcbd8433c8779a2be0c889351) nautilus (stable)
+[root@CEPH01 ceph-deploy]#
 ```
 
 ### Khởi tạo cluster với các node mon (Monitor-quản lý) dựa trên file ceph.conf
@@ -208,63 +205,67 @@ Sau khi thực hiện lệnh phía trên sẽ sinh thêm ra 05 file trong thư m
   - ceph.bootstrap-rgw.keyring
   - ceph.client.admin.keyring
 ```sh
-root@ceph-luminous1-admin ceph-deploy]# ll
-total 312
--rw------- 1 root root     71 Feb 10 11:33 ceph.bootstrap-mds.keyring
--rw------- 1 root root     71 Feb 10 11:33 ceph.bootstrap-mgr.keyring
--rw------- 1 root root     71 Feb 10 11:33 ceph.bootstrap-osd.keyring
--rw------- 1 root root     71 Feb 10 11:33 ceph.bootstrap-rgw.keyring
--rw------- 1 root root     63 Feb 10 11:33 ceph.client.admin.keyring
--rw-r--r-- 1 root root    278 Feb 10 11:28 ceph.conf
--rw-r--r-- 1 root root 284596 Feb 10 11:33 ceph-deploy-ceph.log
--rw------- 1 root root     73 Feb 10 11:21 ceph.mon.keyring
-[root@ceph-luminous1-admin ceph-deploy]#
+[root@CEPH01 ceph-deploy]# ll
+total 292
+-rw------- 1 root root    113 Dec 15 15:36 ceph.bootstrap-mds.keyring
+-rw------- 1 root root    113 Dec 15 15:36 ceph.bootstrap-mgr.keyring
+-rw------- 1 root root    113 Dec 15 15:36 ceph.bootstrap-osd.keyring
+-rw------- 1 root root    113 Dec 15 15:36 ceph.bootstrap-rgw.keyring
+-rw------- 1 root root    151 Dec 15 15:36 ceph.client.admin.keyring
+-rw-r--r-- 1 root root    197 Dec 15 15:12 ceph.conf
+-rw-r--r-- 1 root root 264732 Dec 15 15:36 ceph-deploy-ceph.log
+-rw------- 1 root root     73 Dec 15 15:12 ceph.mon.keyring
+[root@CEPH01 ceph-deploy]#
 ```
- - Để Node ceph-luminous1-admin có thể tương tác được với Cluster chúng ta cần node ceph-luminous1-adminvới quyền admin bằng cách bố sung `admin.keying` cho node
 
- ```sh
- ceph-deploy admin ceph-luminous1-admin
- ```
-<h3 align="center"><img src="..\03-Images\Lab\13.png"></h3>
+## 3. Khởi tạo MGR
 
-### Cài đặt ceph-mgr trên ceph-luminous1-admin
+- **`Ceph-mgr`** là thành phần cài đặt cần khởi tạo từ bản nautilus, có thể cài đặt trên nhiều node hoạt động theo cơ chế `Active-Passive`.
 
-- `ceph-mgr` là thành phần cài đặt cần được khởi tạo từ bản luminous, có thể đặt trên nhiều node và hoạt động theo cơ chế Active-Passive.
+### Cài đặt ceph-mgr trên CEPH01
+
+- Copy thư file `/ceph-deploy/ceph.client.admin.keyring` sang thư mục `/etc/ceph/`:
+```sh
+cp /ceph-deploy/ceph.client.admin.keyring /etc/ceph/
+```
 - Tiến hành cài đặt ceph-mgr
 ```sh
-ceph-deploy mgr create ceph-luminous1-admin
+ceph-deploy mgr create CEPH01
 ```
 
-<h3 align="center"><img src="..\03-Images\Lab\14.png"></h3>
+<h3 align="center"><img src="..\..\03-Images\Lab\3.png"></h3>
 
 - Kiểm tra:
 ```sh
 ceph -s
 ```
 
-<h3 align="center"><img src="..\03-Images\Lab\15.png"></h3>
+<h3 align="center"><img src="..\..\03-Images\Lab\4.png"></h3>
 
 ## 4. Khởi tạo OSD
-### Tạo OSD thông qua ceph-deploy tại host ceph-luminous1-admin
+### Tạo OSD thông qua ceph-deploy tại host CEPH01
 
 - Tại node CEPH01, dùng `ceph-deploy`, để partition ổ cứng OSD, thay ceph01 bằng hostname của host chứa OSD.
 ```sh
-ceph-deploy disk zap ceph-luminous1-admin /dev/vdb
+ceph-deploy disk zap CEPH01 /dev/vdb
 ```
-<h3 align="center"><img src="..\03-Images\Lab\16.png"></h3>
+<h3 align="center"><img src="..\..\03-Images\Lab\5.png"></h3>
 
 - Tạo OSD với `ceph-deploy`
 
 ```sh
-ceph-deploy osd create --data /dev/vdb ceph-luminous1-admin
+ceph-deploy osd create --data /dev/vdb CEPH01
 ```
 
 - Kiểm tra osd vừa khởi tạo
 ```sh
 ceph osd tree
 ```
+<h3 align="center"><img src="..\..\03-Images\Lab\6.png"></h3>
 
-<h3 align="center"><img src="..\03-Images\Lab\17.png"></h3>
+<h3 align="center"><img src="..\..\03-Images\Lab\7.png"></h3>
+
+
 
 
 ### thực hiện khởi tạo OSD tương tự đối các node còn lại
@@ -273,20 +274,37 @@ ceph osd tree
 ceph -s
 ```
 
-<h3 align="center"><img src="..\03-Images\Lab\18.png"></h3>
-<h3 align="center"><img src="..\03-Images\Lab\19.png"></h3>
-<h3 align="center"><img src="..\03-Images\Lab\20.png"></h3>
-
+<h3 align="center"><img src="..\..\03-Images\Lab\8.png"></h3>
+<h3 align="center"><img src="..\..\03-Images\Lab\9.png"></h3>
+<h3 align="center"><img src="..\..\03-Images\Lab\10.png"></h3>
 
 ### khởi tạo dashboard 
-- Ceph-mgr hỗ trợ dashboard để quan sát trạng thái của cluster, Enable mgr dashboard trên host ceph-luminous1-admin
+- Ceph-mgr hỗ trợ dashboard để quan sát trạng thái của cluster, Enable mgr dashboard trên host ceph01
 
+- Tạo file mật khẩu : `/ceph-deploy/passwd.txt`chứa thông tin mật khẩu mật khẩu có nội dung: Abc@123abc
+- thực hiện các lệnh:
 ```sh
+yum install ceph-mgr-dashboard -y
 ceph mgr module enable dashboard
+ceph dashboard create-self-signed-cert
+ceph dashboard set-login-credentials admin -i /ceph-deploy/passwd.txt
 ceph mgr services
 ```
-- kiểm tra:
-  - http://ceph-luminous1-admin:7000/
-<h3 align="center"><img src="..\03-Images\Lab\21.png"></h3>
+trong đó:
+  - admin: tên user
+  - /ceph-deploy/passwd.txt : file password đã khởi tạo trước đó
 
+>Lưu ý cài đặt yum install ceph-mgr-dashboard -y trên cả ceph01 và ceph02
+- Truy cập vào mgr dashboard với username và password vừa đặt ở phía trên để kiểm tra
+```sh
+https://CEPH01:8443/
+```
+- Kết quả: 
 
+<h3 align="center"><img src="..\..\03-Images\Lab\11.png"></h3>
+
+# Tài liệu Tham khảo
+
+- https://github.com/uncelvel/tutorial-ceph/blob/master/docs/setup/ceph-nautilus.md
+
+- https://github.com/quanganh1996111/ceph/blob/main/ceph/thuc-hanh/docs/1-install-ceph-nautilus.md

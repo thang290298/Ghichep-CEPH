@@ -4,7 +4,7 @@
 
 ## 1. Mô hình triển khai
 
-<h3 align="center"><img src="..\03-Images\Lab\22.png"></h3>
+<h3 align="center"><img src="..\..\03-Images\Lab\22.png"></h3>
 
 Trong đó:
   - Ba node CEPH Luminous: CentOS 7 - 64bit.
@@ -34,15 +34,15 @@ Trong đó:
 https://linuxkidd.com/ceph/pgcalc.html
 ```
 
-<h3 align="center"><img src="..\03-Images\Lab\23.png"></h3>
+<h3 align="center"><img src="..\..\03-Images\Lab\23.png"></h3>
 
 - Chọn `Generate Commands` để download file vừa tạo
 
-<h3 align="center"><img src="..\03-Images\Lab\24.png"></h3>
+<h3 align="center"><img src="..\..\03-Images\Lab\24.png"></h3>
 
 - Mở file vừa tạo ra để lấy các lệnh chạy trên node CEPH:
 
-<h3 align="center"><img src="..\03-Images\Lab\25.png"></h3>
+<h3 align="center"><img src="..\..\03-Images\Lab\25.png"></h3>
 
 - Kết quả:
 ```sh
@@ -51,10 +51,10 @@ pool 'newPool' created
 [root@ceph-luminous1-admin ceph-deploy]# ceph osd pool set newPool size 2
 set pool 1 size to 2
 [root@ceph-luminous1-admin ceph-deploy]# while [ $(ceph -s | grep creating -c) -gt 0 ]; do echo -n .;sleep 1; done
-........[root@ceph-luminous1-admin ceph-deploy]#
+..\....\....\....\..[root@ceph-luminous1-admin ceph-deploy]#
 ```
-<h3 align="center"><img src="..\03-Images\Lab\26.png"></h3>
-<h3 align="center"><img src="..\03-Images\Lab\27.png"></h3>
+<h3 align="center"><img src="..\..\03-Images\Lab\26.png"></h3>
+<h3 align="center"><img src="..\..\03-Images\Lab\27.png"></h3>
 
 ## 2. Tạo Image VM (Dùng cho vm) từ CEPH server
 
@@ -93,11 +93,11 @@ scp root@192.168.33.18:/etc/ceph/{key-name}.keyring /etc/ceph/
 ```
 
 `{key-name}`: Check ở ceph server
-<h3 align="center"><img src="..\03-Images\Lab\28.png"></h3>
+<h3 align="center"><img src="..\..\03-Images\Lab\28.png"></h3>
 
 Kết quả:
 
-<h3 align="center"><img src="..\03-Images\Lab\29.png"></h3>
+<h3 align="center"><img src="..\..\03-Images\Lab\29.png"></h3>
 
 - Add `config` vào `rbdmap` trên `ceph client`
 
@@ -132,7 +132,7 @@ systemctl start rbdmap && systemctl enable rbdmap
 
 - Trên client xuất hiện phân cùng `rbd0` phân phối tự ceph server xuống có dung lượng 20GB.
 
-<h3 align="center"><img src="..\03-Images\Lab\30.png"></h3>
+<h3 align="center"><img src="..\..\03-Images\Lab\30.png"></h3>
 
 
 ## 4. Mount, resize và kiểm tra phân vùng
@@ -141,7 +141,7 @@ systemctl start rbdmap && systemctl enable rbdmap
 ```sh
 fdisk /dev/rbd0
 ```
-<h3 align="center"><img src="..\03-Images\Lab\31.png"></h3>
+<h3 align="center"><img src="..\..\03-Images\Lab\31.png"></h3>
 
 ### ĐỊnh dạng và mount phân vùng disk
 
@@ -151,7 +151,7 @@ mkdir /data
 mount /dev/rbd0p1 /data/
 ```
 
-<h3 align="center"><img src="..\03-Images\Lab\32.png"></h3>
+<h3 align="center"><img src="..\..\03-Images\Lab\32.png"></h3>
 
 - Sửa trong `fstab` để khi khởi động lại VM thì phân vùng sẽ tự động khởi động theo:
 ```sh
@@ -177,7 +177,7 @@ rbd resize --size 30G newPool/vol_client --allow-shrink
 
 Kết quả trên client:
 
-<h3 align="center"><img src="..\03-Images\Lab\33.png"></h3>
+<h3 align="center"><img src="..\..\03-Images\Lab\33.png"></h3>
 
 - Phân vùng đã nhận đủ dung lượng khi tăng lên, nhưng dung lượng thực tế được sử dụng vẫn chưa đủ. Ta phải extend phía client lên.
 
@@ -193,7 +193,7 @@ yum install parted -y
 
 - Hiển hị thông tin phần vùng:
 
-<h3 align="center"><img src="..\03-Images\Lab\34.png"></h3>
+<h3 align="center"><img src="..\..\03-Images\Lab\34.png"></h3>
 
 
 - Sử dụng các lệnh sau để resize lại phân vùng:
@@ -206,7 +206,7 @@ resize2fs /dev/rbd0p1
 
 - Kiểm tra dữ liệu bên trong phân vùng, thực hiện tạo 1 file có dung lượng 26GB
 
-<h3 align="center"><img src="..\03-Images\Lab\35.png"></h3>
+<h3 align="center"><img src="..\..\03-Images\Lab\35.png"></h3>
 
 
 # Tài liệu tham khảo
