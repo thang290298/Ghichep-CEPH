@@ -295,5 +295,309 @@ ceph tell osd.{osd-id} bench
 
 vi dụ:
 ```sh
-ceph tell osd.0 bench
+ceph tell osd.1 bench
 ```
+
+<h3 align="center"><img src="..\..\03-Images\Lab\48.png"></h3>
+
+
+- Hiển thị trạng thái sử dụng của các OSD
+
+```sh
+ceph osd df 
+ceph osd df tree
+```
+
+<h3 align="center"><img src="..\..\03-Images\Lab\49.png"></h3>
+
+
+- Hiển thị latency Aplly, Commit data trên các OSD
+
+```sh
+ceph osd perf
+```
+<h3 align="center"><img src="..\..\03-Images\Lab\50.png"></h3>
+
+- Xóa 1 osd ra khỏi cụm Ceph (Thực hiện trên node của OSD đó)
+```sh
+i={osd-id}
+ceph osd out osd.$i
+ceph osd down osd.$i
+systemctl stop ceph-osd@$i
+ceph osd crush rm osd.$i
+ceph osd rm osd.$i
+ceph auth del osd.$i
+```
+
+
+## 5. Các lệnh thao tác trên pool
+- Tạo pool (phải tính toán đúng tham số về replicate, PG)
+```sh
+ceph osd pool create {pool-name} {pg-num} [{pgp-num}] [replicated] \
+     [crush-ruleset-name] [expected-num-objects]
+```
+- Enable aplication pool
+```sh
+osd pool application enable {pool-name} {application}
+osd pool application enable newPool rbd
+```
+
+- Hiển thị toàn bộ tham số của các pool
+```sh
+ceph osd pool ls detail
+```
+<h3 align="center"><img src="..\..\03-Images\Lab\51.png"></h3>
+
+- Hiện thị tham số của 1 pool
+
+```sh
+ceph osd pool get {pool-name} all
+```
+Ví dụ:
+<h3 align="center"><img src="..\..\03-Images\Lab\52.png"></h3>
+
+
+- Điều chỉnh lại giá trị của pool
+```sh
+ceph osd pool set {pool-name} {key} {value}
+```
+
+- Xóa pool
+```sh
+ceph osd pool delete {pool-name}
+```
+## 6. Thao tác đối với RBD
+- Hiển thị các images trong pool
+```sh
+
+rbd ls {pool-name}
+```
+
+<h3 align="center"><img src="..\..\03-Images\Lab\53.png"></h3>
+
+- Create 1 images
+
+```sh
+rbd create {pool-name}/{images} --size {size}
+```
+ví dụ:
+```sh
+rbd create newPool/vol_client1 --size 15G
+```
+<h3 align="center"><img src="..\..\03-Images\Lab\54.png"></h3>
+
+- Hiển thị chi tiết Images
+```sh
+rbd info {pool-name}/{images}
+```
+<h3 align="center"><img src="..\..\03-Images\Lab\55.png"></h3>
+
+
+- Hiển thị dung lượng thực tế của images
+
+```sh
+rbd diff {pool-name}/{images} | awk '{SUM += $2} END {print SUM/1024/1024 " MB"}'
+```
+ví dụ:
+```sh
+[root@ceph-luminous1-admin ~]# rbd diff newPool/vol_client  | awk '{SUM += $2} END {print SUM/1024/1024 " MB"}'
+26917.7 MB
+[root@ceph-luminous1-admin ~]#
+```
+
+- Hiển thị images đang được mapped (trên Client)
+```sh
+rbd showmapped
+```
+
+Ví dụ:
+```sh
+[root@localhost ~]# rbd showmapped
+id pool    image      snap device    
+0  newPool vol_client -    /dev/rbd0 
+[root@localhost ~]# 
+```
+- Xóa Images
+```sh
+rbd rm {pool-name}/{images}
+```
+Ví dụ:
+```sh
+[root@ceph-luminous1-admin ~]# rbd rm newPool/vol_client1
+Removing image: 100% complete...done.
+[root@ceph-luminous1-admin ~]#
+```
+- Create snapshot
+```sh
+rbd snap create {pool-name}/{images}@{snap-name}
+```
+Ví dụ: 
+```sh
+rbd snap create newPool/vol_client@vol_client_snap1
+```
+
+- Kiểm tra tất cả các bản snapshot của 1 volume
+
+```sh
+rbd snap ls {pool-name}/{images}
+```
+Ví dụ:
+```sh
+[root@ceph-luminous1-admin ~]# rbd snap ls newPool/vol_client
+SNAPID NAME              SIZE TIMESTAMP                
+     4 vol_client_snap1 30GiB Thu Feb 24 11:04:03 2022 
+[root@ceph-luminous1-admin ~]#
+```
+- Protect bản snapshot
+```sh
+rbd snap protect {pool-name}/{images}@{snap-name}
+```
+Ví dụ:
+```sh
+rbd snap protect newPool/vol_client@vol_client_snap1
+```
+
+- Roolback snapshot (Cho images trở về tại thời điểm snapshot)
+```sh
+rbd snap rollback {pool-name}/{images}@{snap-name}
+```
+
+- Clone snapshot thành 1 images mới
+```sh
+rbd clone {pool-name}/{images}@{snap-name} {pool-name}/{images-clone}
+```
+
+Ví dụ: 
+```sh
+rbd clone newPool/vol_client@vol_client_snap1 newPool/client-clone
+```
+
+- Kiểm tra các images được clone từ snapshot
+```sh
+rbd children {pool-name}/{images}@{snap-name}
+```
+Ví dụ:
+```sh
+[root@ceph-luminous1-admin ~]# rbd children newPool/vol_client@vol_client_snap1
+newPool/client-clone
+[root@ceph-luminous1-admin ~]#
+```
+
+- Tách hẳn images mới ra khỏi images parent
+```sh
+rbd flatten {pool-name}/{images-clone}
+```
+Ví dụ: 
+```sh
+[root@ceph-luminous1-admin ~]# rbd flatten newPool/client-clone
+Image flatten: 48% complete...2022-02-24 11:27:33.355706 7ff2967fc700 -1 librbd::ImageWatcher: 0x7ff28c01eae0 image watch failed: 140679707755184, (107) Transport endpoint is not connected
+2022-02-24 11:27:33.360870 7ff2967fc700 -1 librbd::Watcher: 0x7ff28c01eae0 handle_error: handle=140679707755184: (107) Transport endpoint is not connected
+Image flatten: 100% complete...done.
+[root@ceph-luminous1-admin ~]#
+```
+> lưu ý: trong quá trình tách hệ thống sẽ chuyển từ trạng thái `HEALTH_OK` sang `HEALTH_WARN` cảu OSD và PG
+<h3 align="center"><img src="..\..\03-Images\Lab\56.png"></h3>
+
+
+- Unprotect bản snapshot
+
+```sh
+rbd snap unprotect {pool-name}/{images}@{snap-name}
+```
+- Xóa 1 bản snapshot
+
+
+```sh
+rbd snap rm {pool-name}/{images}@{snap-name}
+```
+ví dụ:
+```sh
+[root@ceph-luminous1-admin ~]# rbd snap rm newPool/vol_client@vol_client_snap1
+Removing snap: 100% complete...done.
+[root@ceph-luminous1-admin ~]#
+```
+
+- Xóa toàn bộ snapshot của 1 volume
+```sh
+rbd snap purge {pool-name}/{images}
+```
+
+- Export volume
+```sh
+rbd export --rbd-concurrent-management-ops 20 --pool={pool-name} {images} {images}.img
+```
+## 7. Các lệnh thao tác đối với Object
+
+
+- Show toàn bộ pool name
+
+```sh
+rados lspools
+```
+
+- Show toàn bộ Object trên cụm
+
+```sh
+rados -p {pool-name} ls
+```
+
+- Upload Object lên cụm Ceph
+
+```sh
+rados -p {pool-name} put {object-file}
+```
+
+- Download Object từ cụm Ceph
+
+```sh
+rados -p {pool-name} get {object-file}
+```
+
+- Xóa 1 Object cụm Ceph
+
+```sh
+rados -p {pool-name} rm {object-file}
+```
+
+- Kiểm tra các client kết nối đến Object
+sh
+```
+rados -p {pool-name} listwatchers {object-file}
+```
+
+- Benchmark Object bằng rados bench
+
+```sh
+rados -p {pool-name} listwatchers {object-file}
+```
+
+## 8. Các lệnh thao tác xác thực trên Ceph
+
+- Hiển thị toàn bộ các key authen của cụm Ceph
+
+```sh
+ceph auth list
+```
+
+- Create hoặc get key
+
+```sh
+ceph auth get-or-create {key-name} mon {permission} osd {permission} mds {permission} > {key-name}.keyring
+```
+
+- Cập nhật permission key đã có
+
+```sh
+ceph auth caps {key-name} mon {permission} osd {permission} mds {permission}
+```
+
+- Xóa key
+
+```sh
+ceph auth delete {key-name}
+```
+
+
+# Tài liệu Tham Khảo
+
+- https://github.com/quanganh1996111/ceph/blob/main/ceph/thuc-hanh/docs/4-ceph-commands.md
