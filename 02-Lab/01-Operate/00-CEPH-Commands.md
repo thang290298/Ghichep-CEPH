@@ -202,3 +202,98 @@ ceph health
 
 <h3 align="center"><img src="..\..\03-Images\Lab\38.png"></h3>
 
+- Hiển thị trạng thái cum CEPH theo thời gian thực 
+```sh
+ceph -w
+```
+- Kiểm tra trạng thái sử dụng disk của mỗi pool
+```sh
+ceph df
+```
+
+- Kiểm tra trạng thái sử dụng disk của mỗi pool theo Object
+```sh
+rados df
+```
+
+## 3. Lệnh MGR service
+
+- Kiểm tra thông tin các module của MGR
+```sh
+ceph mgr dump
+```
+
+
+<h3 align="center"><img src="..\..\03-Images\Lab\39.png"></h3>
+
+- Enable cấc module MGR
+```sh
+ceph mgr module enable {module}
+ceph mgr module enable zabbix
+```
+
+<h3 align="center"><img src="..\..\03-Images\Lab\40.png"></h3>
+
+
+## 4. Lệnh thao tác với OSD
+- Kiểm tra OSD được tạo từ phân vùng ổ LVM nào trên host
+```sh
+ceph-volume lvm list
+```
+
+- OSD nào thì kiểm tra trên node đó.
+
+<h3 align="center"><img src="..\..\03-Images\Lab\41.png"></h3>
+
+- Hiển trị trạn thái các OSD trong cụm.
+```sh
+ceph osd stat
+```
+<h3 align="center"><img src="..\..\03-Images\Lab\42.png"></h3>
+
+- Hiển thị tình trạng used, r/w, state của các OSD
+
+<h3 align="center"><img src="..\..\03-Images\Lab\43.png"></h3>
+
+- Hiển thị Crushmap OSD
+
+```sh
+ceph osd tree
+ceph osd crush tree
+ceph osd crush tree --show-shadow
+```
+<h3 align="center"><img src="..\..\03-Images\Lab\45.png"></h3>
+
+- Kiểm tra chi tiết location của 1 OSD
+```sh
+ceph osd find {osd-id}
+```
+
+ví dụ:
+```sh
+ceph osd find 1
+```
+
+<h3 align="center"><img src="..\..\03-Images\Lab\46.png"></h3>
+
+- Kiểm tra chi tiết metadata của 1 OSD
+```sh
+ceph osd metadata {osd-id}
+```
+ví dụ:
+```sh
+ceph osd metadata 0
+```
+
+<h3 align="center"><img src="..\..\03-Images\Lab\47.png"></h3>
+
+
+- Benchmark OSD
+```sh
+ceph tell osd.{osd-id} bench
+```
+
+vi dụ:
+```sh
+ceph tell osd.0 bench
+```
