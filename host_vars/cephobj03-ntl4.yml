@@ -1,0 +1,24 @@
+meta:  
+  host: cephobj03-ntl4
+  ip: 10.193.32.23
+  labels:
+  - mon
+  - mgr
+  ssd:
+  - /dev/sda
+  - /dev/sdb
+  hdd:
+  - /dev/sdc
+  - /dev/sdd
+  - /dev/sde
+  - /dev/sdf
+  - /dev/sdg
+  - /dev/sdh
+  - /dev/sdi
+  - /dev/sdk
+  - /dev/sdl
+  - /dev/sdm
+
+# osd_objectstore: Chon bluestore hoac filestore
+osd_objectstore: bluestore
+crush_device_class: ssd

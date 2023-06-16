@@ -1,0 +1,33 @@
+### Admin hosts
+[admin]
+cephhdd01-tt3 ansible_host=10.195.18.61
+
+### Service host
+[mons]
+cephhdd01-tt3 ansible_host=10.195.18.61
+cephhdd02-tt3 ansible_host=10.195.18.62
+cephhdd03-tt3 ansible_host=10.195.18.63
+cephhdd04-tt3 ansible_host=10.195.18.64
+cephhdd05-tt3 ansible_host=10.195.18.65
+
+[mgrs]
+cephhdd01-tt3 ansible_host=10.195.18.61
+cephhdd02-tt3 ansible_host=10.195.18.62
+cephhdd03-tt3 ansible_host=10.195.18.63
+cephhdd04-tt3 ansible_host=10.195.18.64
+cephhdd05-tt3 ansible_host=10.195.18.65
+
+
+[osds]
+cephhdd01-tt3 ansible_host=10.195.18.61
+cephhdd02-tt3 ansible_host=10.195.18.62
+cephhdd03-tt3 ansible_host=10.195.18.63
+cephhdd04-tt3 ansible_host=10.195.18.64
+cephhdd05-tt3 ansible_host=10.195.18.65
+cephhdd06-tt3 ansible_host=10.195.18.66
+cepbkup01-tt3 ansible_host=10.195.18.67
+cepbkup02-tt3 ansible_host=10.195.18.68
+cephssd01-tt3 ansible_host=10.195.18.81
+cephssd02-tt3 ansible_host=10.195.18.82
+cephssd03-tt3 ansible_host=10.195.18.83
+cephssd04-tt3 ansible_host=10.195.18.84

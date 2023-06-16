@@ -1,0 +1,12 @@
+{% for host in groups['all'] %}
+service_type: host
+hostname: {{ hostvars[host].meta.host }}
+addr: {{ hostvars[host].meta.ip }}
+{% if 'labels' in hostvars[host].meta %}
+labels:
+{% for label in hostvars[host].meta.labels %}
+- {{ label }}
+{% endfor %}
+{% endif %}
+---  
+{% endfor %}

@@ -1,0 +1,60 @@
+[global]
+#auth client required = cephx
+#auth cluster required = cephx
+#auth service required = cephx
+cephx_cluster_require_signatures = false
+cephx_require_signatures = false
+cephx_sign_messages = false
+cluster network = {{ network_ceph.cluster_network }}
+debug asok = 0/0
+debug auth = 0/0
+debug bluestore = 0/0
+debug buffer = 0/0
+debug client = 0/0
+debug context = 0/0
+debug crush = 0/0
+debug crypto = 0/0
+debug filer = 0/0
+debug filestore = 0/0
+debug finisher = 0/0
+debug hadoop = 0/0
+debug heartbeatmap = 0/0
+debug journal = 0/0
+debug journaler = 0/0
+debug lockdep = 0/0
+debug mds = 0/0
+debug mds balancer = 0/0
+debug mds locker = 0/0
+debug mds log = 0/0
+debug mds log expire = 0/0
+debug mds migrator = 0/0
+debug mon = 0/0
+debug monc = 0/0
+debug ms = 0/0
+debug objclass = 0/0
+debug objectcacher = 0/0
+debug objecter = 0/0
+debug optracker = 0/0
+debug osd = 0/0
+debug paxos = 0/0
+debug perfcounter = 0/0
+debug rados = 0/0
+debug rbd = 0/0
+debug rgw = 0/0
+debug throttle = 0/0
+debug timer = 0/0
+debug tp = 0/0
+#mon host = [v2:192.168.70.71:3300,v1:192.168.70.71:6789],[v2:192.168.70.72:3300,v1:192.168.70.72:6789],[v2:192.168.70.73:3300,v1:192.168.70.73:6789]
+mon host = {% for host in groups['mons'] %}
+[v2:{{ hostvars[host].meta.ip }}:3300,v1:{{ hostvars[host].meta.ip }}:6789]
+{%- if not loop.last %},{% endif %}
+{% endfor %}
+
+mon_allow_pool_delete = true    
+osd pool default crush rule = -1
+osd_pool_default_min_size = 1
+osd_pool_default_pg_num = 128
+osd_pool_default_size = 3
+public network = {{ network_ceph.public_networks }} 
+osd_memory_target = 8G
+osd_memory_cache_min = 4G

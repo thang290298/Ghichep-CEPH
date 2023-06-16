@@ -1,0 +1,4 @@
+# osd_objectstore: Chon bluestore hoac filestore
+osd_objectstore: bluestore
+
+crush_device_class: ssd

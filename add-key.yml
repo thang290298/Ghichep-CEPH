@@ -1,0 +1,53 @@
+---
+# This playbook is used to manage CephX Keys
+# You will find examples below on how the module can be used on daily operations
+
+- hosts: "{{ groups['mons'][0] }}"
+  gather_facts: false
+  vars:
+    cluster: ceph
+    keys_to_create:
+       - { name: client.glance, caps: { mon: "profile rbd", osd: "profile rbd pool={{ images.name }}, profile rbd pool={{ images.name }}"}, mode: "0600" }
+       - { name: client.cinder, caps: { mon: "profile rbd", osd: "profile rbd pool={{ volumes_hdd.name }}, profile rbd pool={{ volumes_ssd.name }}, profile rbd pool={{ images.name }}, profile rbd pool={{ backups_baas.name }}"}, mode: "0600" }
+       - { name: client.cinder-backup, caps: { mon: "profile rbd", osd: "profile rbd pool={{ backups.name }}"}, mode: "0600" }
+
+  tasks:
+    - name: create ceph key(s) module
+      ceph_key:
+        name: "{{ item.name }}"
+        state: present
+        caps: "{{ item.caps }}"
+        cluster: "{{ cluster }}"
+        secret: "{{ item.key | default('') }}"
+      with_items: "{{ keys_to_create }}"
+
+    - name: update ceph key(s)
+      ceph_key:
+        name: "{{ item.name }}"
+        state: update
+        caps: "{{ item.caps }}"
+        cluster: "{{ cluster }}"
+      with_items: "{{ keys_to_create }}"
+
+    - name: info ceph key(s)
+      ceph_key:
+        name: "{{ item }}"
+        state: info
+        cluster: "{{ cluster }}"
+      register: key_info
+      ignore_errors: true
+      with_items: "{{ keys_to_info }}"
+
+    - name: list ceph key(s)
+      ceph_key:
+        state: list
+        cluster: "{{ cluster }}"
+      register: list_keys
+      ignore_errors: true
+
+    - name: fetch_initial_keys
+      ceph_key:
+        state: fetch_initial_keys
+        cluster: "{{ cluster }}"
+      ignore_errors: true
+

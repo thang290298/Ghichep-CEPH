@@ -1,0 +1,28 @@
+### Admin hosts
+[admin]
+cephssd01-ntl4 ansible_host=10.165.52.81
+
+### Service host
+[mons]
+cephssd01-ntl4 ansible_host=10.165.52.81
+cephssd02-ntl4 ansible_host=10.165.52.82
+cephssd03-ntl4 ansible_host=10.165.52.83
+cephssd04-ntl4 ansible_host=10.165.52.84
+cephssd05-ntl4 ansible_host=10.165.52.85
+
+[mgrs]
+cephssd01-ntl4 ansible_host=10.165.52.81
+cephssd02-ntl4 ansible_host=10.165.52.82
+cephssd03-ntl4 ansible_host=10.165.52.83
+cephssd04-ntl4 ansible_host=10.165.52.84
+cephssd05-ntl4 ansible_host=10.165.52.85
+
+[osds]
+cephssd01-ntl4 ansible_host=10.165.52.81
+cephssd02-ntl4 ansible_host=10.165.52.82
+cephssd03-ntl4 ansible_host=10.165.52.83
+cephssd04-ntl4 ansible_host=10.165.52.84
+cephssd05-ntl4 ansible_host=10.165.52.85
+cephssd06-ntl4 ansible_host=10.165.52.86
+cephssd07-ntl4 ansible_host=10.165.52.82
+cephssd08-ntl4 ansible_host=10.165.52.88

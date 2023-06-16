@@ -1,0 +1,44 @@
+- hosts: "{{ groups['mons'][0] }}"
+  tasks:
+    - name: create Realm default
+      radosgw_realm:
+        name: vnpt
+        default: true      
+
+    - name: create Zonegroup master default
+      radosgw_zonegroup:
+        name: vn
+        realm: vnpt
+        default: true
+        master: true
+        endpoints: 
+          - http://192.168.1.10:8080
+          - http://192.168.1.11:8080
+
+    - name: create a Zone master default
+      radosgw_zone:
+        name: hanoi
+        realm: vnpt
+        zonegroup: vn
+        endpoints:
+          - http://192.168.1.10:8080
+          - http://192.168.1.11:8080
+        default: true
+        master: true
+    
+    # Xóa default
+    - name: delete a RADOS Gateway realm
+      radosgw_realm:
+        name: default
+        state: absent
+    - name: delete zonegroup default
+      radosgw_zonegroup:
+        name: default
+        state: absent
+    - name: delete zone default
+      radosgw_zone:
+        name: default
+        state: absent
+    # Update commit
+    - name: radosgw-admin update
+      command: radosgw-admin period update --commit

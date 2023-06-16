@@ -1,0 +1,123 @@
+# Khai bao thong tin rgw service:
+rgw_service:
+  id: smartcloud_hanoi
+  count_per_host: 1 # số instance rgw triển khai trên 1 node
+  realm: "vnpt"
+  zonegroup: "vn"
+  zone: "hanoi"
+  port: 8080
+  type: "beast"
+
+# Khai bao thong tin netowrk
+network_ceph:  
+  public_networks: "10.10.20.0/24"
+  cluster_network: 10.10.1.0/24
+
+# Khai bao cac pool can tao
+create_pools:
+  - "{{ rgw_root }}"
+  - "{{ hanoi_rgw_log }}"
+  - "{{ hanoi_rgw_control }}"
+  - "{{ hanoi_rgw_meta }}"
+  - "{{ hanoi_rgw_buckets_index }}"   
+  - "{{ hanoi_rgw_otp }}"
+  - "{{ hanoi_rgw_buckets_non_ec }}"
+  - "{{ hanoi_rgw_buckets_data }}"
+
+# Khai bao thong tin chi tiet cho cac pool tren
+rgw_root:
+  name: ".rgw.root"
+  pg_num: 16
+  pgp_num: 16
+  rule_name: "ceph_ssd"
+  type: 1
+  erasure_profile: ""
+  expected_num_objects: ""
+  application: "rgw"
+  size: 3
+  min_size: 1
+  pg_autoscale_mode: False
+hanoi_rgw_log:
+  name: "hanoi.rgw.log"
+  pg_num: 64
+  pgp_num: 64
+  rule_name: "ceph_ssd"
+  type: 1
+  erasure_profile: ""
+  expected_num_objects: ""
+  application: "rgw"
+  size: 3
+  min_size: 1
+  pg_autoscale_mode: False
+hanoi_rgw_control:
+  name: "hanoi.rgw.control"
+  pg_num: 16
+  pgp_num: 16
+  rule_name: "ceph_ssd"
+  type: 1
+  erasure_profile: ""
+  expected_num_objects: ""
+  application: "rgw"
+  size: 3
+  min_size: 1
+  pg_autoscale_mode: False
+hanoi_rgw_meta:
+  name: "hanoi.rgw.meta"
+  pg_num: 256
+  pgp_num: 256
+  rule_name: "ceph_ssd"
+  type: 1
+  erasure_profile: ""
+  expected_num_objects: ""
+  application: "rgw"
+  size: 3
+  min_size: 1
+  pg_autoscale_mode: False
+hanoi_rgw_buckets_index:
+  name: "hanoi.rgw.buckets.index"
+  pg_num: 512
+  pgp_num: 512
+  rule_name: "ceph_ssd"
+  type: 1
+  erasure_profile: ""
+  expected_num_objects: ""
+  application: "rgw"
+  size: 3
+  min_size: 1
+  pg_autoscale_mode: False
+hanoi_rgw_otp:
+  name: "hanoi.rgw.otp"
+  pg_num: 16
+  pgp_num: 16
+  rule_name: "ceph_ssd"
+  type: 1
+  erasure_profile: ""
+  expected_num_objects: ""
+  application: "rgw"
+  size: 3
+  min_size: 1
+  pg_autoscale_mode: False
+hanoi_rgw_buckets_non_ec:
+  name: "hanoi.rgw.buckets.non-ec"
+  pg_num: 16
+  pgp_num: 16
+  rule_name: "ceph_ssd"
+  type: 1
+  erasure_profile: ""
+  expected_num_objects: ""
+  application: "rgw"
+  size: 3
+  min_size: 1
+  pg_autoscale_mode: False
+hanoi_rgw_buckets_data:
+  name: "hanoi.rgw.buckets.data"
+  pg_num: 4096
+  pgp_num: 4096
+  rule_name: "ceph_hdd"
+  type: 1
+  erasure_profile: ""
+  expected_num_objects: ""
+  application: "rgw"
+  size: 3
+  min_size: 1
+  pg_autoscale_mode: False

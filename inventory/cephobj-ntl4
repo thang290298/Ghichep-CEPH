@@ -1,0 +1,44 @@
+### Admin hosts
+[admin]
+cephobj01-ntl4 ansible_host=10.165.58.21
+
+### Service host
+[mons]
+cephobj01-ntl4 ansible_host=10.165.58.21
+cephobj02-ntl4 ansible_host=10.165.58.22
+cephobj03-ntl4 ansible_host=10.165.58.23
+cephobj04-ntl4 ansible_host=10.165.58.24
+cephobj05-ntl4 ansible_host=10.165.58.25
+
+[mgrs]
+cephobj01-ntl4 ansible_host=10.165.58.21
+cephobj02-ntl4 ansible_host=10.165.58.22
+cephobj03-ntl4 ansible_host=10.165.58.23
+cephobj04-ntl4 ansible_host=10.165.58.24
+cephobj05-ntl4 ansible_host=10.165.58.25
+
+[rgws]
+cephobj06-ntl4 ansible_host=10.165.58.26
+cephobj07-ntl4 ansible_host=10.165.58.22
+cephobj08-ntl4 ansible_host=10.165.58.28
+cephobj09-ntl4 ansible_host=10.165.58.29
+cephobj10-ntl4 ansible_host=10.165.58.30
+cephobj11-ntl4 ansible_host=10.165.58.31
+cephobj12-ntl4 ansible_host=10.165.58.32
+cephobj13-ntl4 ansible_host=10.165.58.33
+
+[osds]
+cephobj01-ntl4 ansible_host=10.165.58.21
+cephobj02-ntl4 ansible_host=10.165.58.22
+cephobj03-ntl4 ansible_host=10.165.58.23
+cephobj04-ntl4 ansible_host=10.165.58.24
+cephobj05-ntl4 ansible_host=10.165.58.25
+cephobj06-ntl4 ansible_host=10.165.58.26
+cephobj07-ntl4 ansible_host=10.165.58.22
+cephobj08-ntl4 ansible_host=10.165.58.28
+cephobj09-ntl4 ansible_host=10.165.58.29
+cephobj10-ntl4 ansible_host=10.165.58.30
+cephobj11-ntl4 ansible_host=10.165.58.31
+cephobj12-ntl4 ansible_host=10.165.58.32
+cephobj13-ntl4 ansible_host=10.165.58.33
+cephobj14-ntl4 ansible_host=10.165.58.34

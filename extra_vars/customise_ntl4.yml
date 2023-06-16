@@ -1,0 +1,35 @@
+# Khai bao cac pool can tao
+create_pools:
+  - "{{ images }}"
+  - "{{ volumes_ssd }}"
+
+# Khai bao thong tin netowrk
+network_ceph:  
+  public_networks: "10.165.52.0/24"
+  cluster_network: "10.165.53.0/24"
+
+# Khai bao thong tin chi tiet cho cac pool tren
+images:
+  name: "images"
+  pg_num: 1024
+  pgp_num: 1024
+  rule_name: "ceph_ssd"
+  type: 1
+  erasure_profile: ""
+  expected_num_objects: ""
+  application: "rbd"
+  size: 3
+  min_size: 1
+  pg_autoscale_mode: False
+volumes_ssd:
+  name: "volumes_ssd"
+  pg_num: 4096
+  pgp_num: 4096
+  rule_name: "ceph_ssd"
+  type: 1
+  erasure_profile: ""
+  expected_num_objects: ""
+  application: "rbd"
+  size: 3
+  min_size: 1
+  pg_autoscale_mode: False
