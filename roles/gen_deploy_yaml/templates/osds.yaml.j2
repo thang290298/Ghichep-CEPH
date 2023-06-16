@@ -12,7 +12,7 @@ spec:
     - {{ path }}
 {% endfor %}
   crush_device_class: ssd
----  
+---
 {% endif %}
 {% if 'hdd' in hostvars[host].meta %}
 service_type: osd
@@ -21,11 +21,13 @@ placement:
   hosts:
   - {{ hostvars[host].meta.host }}
 spec:
+{% if 'blockdb' in hostvars[host].meta %}
   db_devices:
     paths:
 {% for path in hostvars[host].meta.blockdb %}
     - {{ path }}
 {% endfor %}
+{% endif %}
   data_devices:
     paths:
 {% for path in hostvars[host].meta.hdd %}
