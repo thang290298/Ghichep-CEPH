@@ -1,0 +1,15 @@
+### Admin hosts
+[admin]
+ceph01-quincy ansible_host=192.168.70.61
+
+### Service host
+[mons]
+ceph01-quincy ansible_host=192.168.70.61
+
+[mgrs]
+ceph01-quincy ansible_host=192.168.70.61
+
+[osds]
+ceph01-quincy ansible_host=192.168.70.61
+ceph02-quincy ansible_host=192.168.70.62
+ceph03-quincy ansible_host=192.168.70.63

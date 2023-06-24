@@ -18,3 +18,4 @@
         application: "{{ item.application | default(omit) }}"
       with_items: "{{ create_pools }}"
 
+

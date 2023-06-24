@@ -8,7 +8,7 @@
     cluster: ceph
     keys_to_create:
        - { name: client.glance, caps: { mon: "profile rbd", osd: "profile rbd pool={{ images.name }}, profile rbd pool={{ images.name }}"}, mode: "0600" }
-       - { name: client.cinder, caps: { mon: "profile rbd", osd: "profile rbd pool={{ volumes_hdd.name }}, profile rbd pool={{ volumes_ssd.name }}, profile rbd pool={{ images.name }}, profile rbd pool={{ backups_baas.name }}"}, mode: "0600" }
+       - { name: client.cinder, caps: { mon: "profile rbd", osd: "profile rbd pool={{ volumes_hdd.name }}, profile rbd pool={{ volumes_ssd.name }}, profile rbd pool={{ images.name }}"}, mode: "0600" }
        - { name: client.cinder-backup, caps: { mon: "profile rbd", osd: "profile rbd pool={{ backups.name }}"}, mode: "0600" }
 
   tasks:

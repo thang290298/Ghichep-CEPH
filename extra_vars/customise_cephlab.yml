@@ -3,16 +3,40 @@ create_pools:
   - "{{ images }}"
   - "{{ volumes_hdd }}"
   - "{{ volumes_ssd }}"
-  - "{{ backups }}"
+  - "{{ backups }}"  
 
 # Khai bao thong tin netowrk
 network_ceph:  
-  public_networks: "10.193.32.0/24"
-  cluster_network: "10.193.33.0/24"
+  public_networks: "192.168.70.0/24"
+  cluster_network: "10.10.10.0/24"
 
 # Khai bao thong tin chi tiet cho cac pool tren
 images:
   name: "images"
+  pg_num: 128
+  pgp_num: 128
+  rule_name: "ceph_ssd"
+  type: 1
+  erasure_profile: ""
+  expected_num_objects: ""
+  application: "rbd"
+  size: 1
+  min_size: 1
+  pg_autoscale_mode: False
+volumes_hdd:
+  name: "volumes_hdd"
+  pg_num: 256
+  pgp_num: 256
+  rule_name: "ceph_ssd"
+  type: 1
+  erasure_profile: ""
+  expected_num_objects: ""
+  application: "rbd"
+  size: 1
+  min_size: 1
+  pg_autoscale_mode: False
+volumes_ssd:
+  name: "volumes_ssd"
   pg_num: 512
   pgp_num: 512
   rule_name: "ceph_ssd"
@@ -20,42 +44,18 @@ images:
   erasure_profile: ""
   expected_num_objects: ""
   application: "rbd"
-  size: 3
+  size: 1
   min_size: 1
   pg_autoscale_mode: False
-volumes_hdd:
-  name: "volumes_hdd"
-  pg_num: 2048
-  pgp_num: 2048
-  rule_name: "ceph_hdd"
-  type: 1
-  erasure_profile: ""
-  expected_num_objects: ""
-  application: "rbd"
-  size: 3
-  min_size: 1
-  pg_autoscale_mode: False
-volumes_ssd:
-  name: "volumes_ssd"
-  pg_num: 2048
-  pgp_num: 2048
+backups:
+  name: "backups"
+  pg_num: 64
+  pgp_num: 64
   rule_name: "ceph_ssd"
   type: 1
   erasure_profile: ""
   expected_num_objects: ""
   application: "rbd"
-  size: 3
-  min_size: 1
-  pg_autoscale_mode: False
-backups:
-  name: "backups"
-  pg_num: 1024
-  pgp_num: 1024
-  rule_name: "ceph_hdd"
-  type: 1
-  erasure_profile: ""
-  expected_num_objects: ""
-  application: "rbd"
-  size: 2
+  size: 1
   min_size: 1
   pg_autoscale_mode: False

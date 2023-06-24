@@ -2,12 +2,12 @@
 ## tasks file for install_cephadm
 - name: Download cephadm
   get_url:
-    url: https://github.com/ceph/ceph/raw/pacific/src/cephadm/cephadm
+    url: https://github.com/ceph/ceph/raw/quincy/src/cephadm/cephadm
     dest: /root/cephadm
     mode: '0755'
 
 - name: Add repo cephadm
-  shell: "/root/cephadm add-repo --release pacific"
+  shell: "/root/cephadm add-repo --release quincy"
   args:
     executable: /bin/bash
 
@@ -17,7 +17,7 @@
     executable: /bin/bash
 
 - name: Add repo with cephadm
-  shell: "cephadm add-repo --release pacific"
+  shell: "cephadm add-repo --release quincy"
 
 - name: Install ceph-common
   shell: "cephadm install ceph-common"
