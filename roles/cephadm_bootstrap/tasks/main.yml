@@ -1,0 +1,13 @@
+---
+# tasks file for cephadm_bootstrap/
+
+# Bootstrap ceph cluster
+- name: Bootstraps ceph-cluster
+  cephadm_bootstrap:
+    mon_ip: 192.168.60.71
+    dashboard: true
+    dashboard_user: admin
+    dashboard_password: "Vnpt2023"
+    monitoring: false
+    cluster_network: 10.10.0.0/24
+    config_file: /root/ceph.conf

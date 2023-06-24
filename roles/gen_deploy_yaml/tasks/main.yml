@@ -1,0 +1,36 @@
+---
+# tasks file for gen_deploy_yaml
+- name: gen hosts.yaml
+  template:
+    src: hosts.yaml.j2
+    dest: /root/hosts.yaml
+
+- name: gen mons.yaml
+  template:
+    src: mons.yaml.j2
+    dest: /root/mons.yaml
+  when: groups['mons'] is defined
+
+- name: gen mgrs.yaml
+  template:
+    src: mgrs.yaml.j2
+    dest: /root/mgrs.yaml
+  when: groups['mgrs'] is defined
+
+- name: gen osds.yaml
+  template:
+    src: osds.yaml.j2
+    dest: /root/osds.yaml
+  when: groups['osds'] is defined
+
+- name: gen rgws.yaml
+  template:
+    src: rgws.yaml.j2
+    dest: /root/rgws.yaml
+  when: groups['rgws'] is defined
+
+- name: gen ceph.conf
+  template:
+    src: ceph.conf.j2
+    dest: /root/ceph.conf
+  when: groups['mons'] is defined

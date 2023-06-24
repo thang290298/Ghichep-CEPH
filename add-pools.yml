@@ -1,0 +1,21 @@
+- hosts: "{{ groups['mons'][0] }}"
+  become: true
+  tasks:
+    - name: Create pool
+      ceph_pool:
+        name: "{{ item.name }}"
+        state: present
+        cluster: ceph
+        pg_num: "{{ item.pg_num | default(osd_pool_default_pg_num) if not item.0.pg_autoscale_mode | default(False) | bool else 16 }}"
+        pgp_num: "{{ item.pgp_num | default(item.pg_num) | default(osd_pool_default_pg_num) if not item.pg_autoscale_mode | default(False) | bool else omit }}"
+        size: "{{ item.size | default(omit) }}"
+        min_size: "{{ item.min_size | default(omit) }}"
+        pool_type: "{{ item.type | default('replicated') }}"
+        rule_name: "{{ item.rule_name | default(omit) }}"
+        erasure_profile: "{{ item.erasure_profile | default(omit) }}"
+        pg_autoscale_mode: "{{ item.pg_autoscale_mode | default(omit) }}"
+        target_size_ratio: "{{ item.target_size_ratio | default(omit) }}"
+        application: "{{ item.application | default(omit) }}"
+      with_items: "{{ create_pools }}"
+
+

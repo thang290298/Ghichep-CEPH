@@ -1,0 +1,15 @@
+service_type: rgw
+service_id: {{ rgw_service.id }}
+placement:
+  hosts:
+{% for host in groups['rgws'] %}
+  - {{ hostvars[host].meta.host }}
+{% endfor %}
+  count_per_host: {{ rgw_service.count_per_host }}
+spec:
+  rgw_realm: {{ rgw_service.realm }}
+  rgw_zone: {{ rgw_service.zone }}
+  rgw_frontend_port: {{ rgw_service.port }}
+  rgw_frontend_type: {{ rgw_service.type }}
+networks:
+  - {{ network_ceph.public_networks }}

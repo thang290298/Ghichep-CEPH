@@ -1,0 +1,14 @@
+meta:  
+  host: ceph02-quincy
+  ip: 192.168.70.62
+  labels:
+  - osd
+  blockdb:
+  - /dev/vdb
+  ssd:
+  - /dev/vdc
+  - /dev/vdd
+  - /dev/vde
+# osd_objectstore: Chon bluestore hoac filestore
+osd_objectstore: bluestore
+crush_device_class: ssd

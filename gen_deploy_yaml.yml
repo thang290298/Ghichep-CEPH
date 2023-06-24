@@ -1,0 +1,8 @@
+# Generate file deploy cephadm
+- name: Generate file deploy cephadm
+  gather_facts: false
+  become: true
+  hosts: "{{ groups['admin'][0] }}"
+  roles:
+    - { role: gen_deploy_yaml,
+        tags: gen_deploy_yaml }

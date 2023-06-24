@@ -1,0 +1,6 @@
+service_type: mon
+placement:
+  hosts:
+{% for host in groups['mons'] %}
+  - {{ hostvars[host].meta.host }}
+{% endfor %}

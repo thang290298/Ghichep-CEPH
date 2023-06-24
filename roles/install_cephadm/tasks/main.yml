@@ -1,0 +1,23 @@
+---
+## tasks file for install_cephadm
+- name: Download cephadm
+  get_url:
+    url: https://github.com/ceph/ceph/raw/quincy/src/cephadm/cephadm
+    dest: /root/cephadm
+    mode: '0755'
+
+- name: Add repo cephadm
+  shell: "/root/cephadm add-repo --release quincy"
+  args:
+    executable: /bin/bash
+
+- name: Install cephadm
+  shell: "/root/cephadm install"
+  args:
+    executable: /bin/bash
+
+- name: Add repo with cephadm
+  shell: "cephadm add-repo --release quincy"
+
+- name: Install ceph-common
+  shell: "cephadm install ceph-common"

@@ -1,0 +1,18 @@
+# Liet ke device_class trong he thong
+- hosts: "{{ groups['mons'][0] }}"
+  name: Show Crush rule
+  tasks:
+    - command: ceph osd crush class ls
+      register: crush_rule
+    - debug: var=crush_rule.stdout
+
+# Tao crush_rule cho he thong tuong ung voi device_class
+- hosts: "{{ groups['mons'][0] }}"
+  name: Create crush_rules
+  tasks: 
+    - set_fact:
+        crush_class: "{{ crush_rule.stdout }}"
+    - command: ceph osd crush rule create-replicated ceph_{{ item }} default host {{ item }}
+      with_items:
+      - "{{ crush_class }}"
+      register: results

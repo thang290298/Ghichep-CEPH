@@ -1,0 +1,46 @@
+{% for host in groups['osds'] %}
+{% if 'ssd' in hostvars[host].meta %}
+service_type: osd
+service_id: {{ hostvars[host].meta.host }}ssd
+placement:
+  hosts:
+  - {{ hostvars[host].meta.host }}
+spec:
+{% if 'blockdb' in hostvars[host].meta %}
+  db_devices:
+    paths:
+{% for path in hostvars[host].meta.blockdb %}
+    - {{ path }}
+{% endfor %}
+{% endif %}
+  data_devices:
+    paths:
+{% for path in hostvars[host].meta.ssd %}
+    - {{ path }}
+{% endfor %}
+  crush_device_class: ssd
+---
+{% endif %}
+{% if 'hdd' in hostvars[host].meta %}
+service_type: osd
+service_id: {{ hostvars[host].meta.host }}hdd
+placement:
+  hosts:
+  - {{ hostvars[host].meta.host }}
+spec:
+{% if 'blockdb' in hostvars[host].meta %}
+  db_devices:
+    paths:
+{% for path in hostvars[host].meta.blockdb %}
+    - {{ path }}
+{% endfor %}
+{% endif %}
+  data_devices:
+    paths:
+{% for path in hostvars[host].meta.hdd %}
+    - {{ path }}
+{% endfor %}
+  crush_device_class: hdd
+---
+{% endif %}
+{% endfor %}
