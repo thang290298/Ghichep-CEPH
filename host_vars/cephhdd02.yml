@@ -1,0 +1,16 @@
+meta:
+  host: cephhdd02
+  ip: 192.168.70.62
+  labels:
+  - mon
+  - mgr
+  - osd
+  blockdb:
+  - /dev/vdb
+  hdd:
+  - /dev/vdc
+  - /dev/vdd
+  - /dev/vde
+# osd_objectstore: Chon bluestore hoac filestore
+osd_objectstore: bluestore
+crush_device_class: hdd

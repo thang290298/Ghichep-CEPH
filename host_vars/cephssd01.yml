@@ -1,0 +1,14 @@
+meta:  
+  host: cephssd01
+  ip: 192.168.70.63
+  labels:
+  - mon
+  - mgr
+  - osd
+  ssd:
+  - /dev/vdb
+  - /dev/vdc
+  - /dev/vdd
+# osd_objectstore: Chon bluestore hoac filestore
+osd_objectstore: bluestore
+crush_device_class: ssd

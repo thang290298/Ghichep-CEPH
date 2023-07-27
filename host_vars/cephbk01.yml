@@ -1,0 +1,12 @@
+meta:  
+  host: cephbk01
+  ip: 192.168.70.64
+  labels:
+  - osd
+  hdd:
+  - /dev/vdb
+  - /dev/vdc
+
+# osd_objectstore: Chon bluestore hoac filestore
+osd_objectstore: bluestore
+crush_device_class: backup

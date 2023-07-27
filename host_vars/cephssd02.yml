@@ -1,0 +1,12 @@
+meta:  
+  host: cephssd02
+  ip: 192.168.70.68
+  labels:
+  - osd
+  ssd:
+  - /dev/vdb
+  - /dev/vdc
+  - /dev/vdd
+# osd_objectstore: Chon bluestore hoac filestore
+osd_objectstore: bluestore
+crush_device_class: ssd

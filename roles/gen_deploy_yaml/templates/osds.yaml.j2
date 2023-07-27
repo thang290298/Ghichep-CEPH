@@ -1,7 +1,7 @@
 {% for host in groups['osds'] %}
 {% if 'ssd' in hostvars[host].meta %}
 service_type: osd
-service_id: {{ hostvars[host].meta.host }}ssd
+service_id: {{ hostvars[host].meta.host }}{{ hostvars[host].crush_device_class }}
 placement:
   hosts:
   - {{ hostvars[host].meta.host }}
@@ -18,12 +18,12 @@ spec:
 {% for path in hostvars[host].meta.ssd %}
     - {{ path }}
 {% endfor %}
-  crush_device_class: ssd
+  crush_device_class: {{ hostvars[host].crush_device_class }}
 ---
 {% endif %}
 {% if 'hdd' in hostvars[host].meta %}
 service_type: osd
-service_id: {{ hostvars[host].meta.host }}hdd
+service_id: {{ hostvars[host].meta.host }}{{ hostvars[host].crush_device_class }}
 placement:
   hosts:
   - {{ hostvars[host].meta.host }}
@@ -40,7 +40,7 @@ spec:
 {% for path in hostvars[host].meta.hdd %}
     - {{ path }}
 {% endfor %}
-  crush_device_class: hdd
+  crush_device_class: {{ hostvars[host].crush_device_class }}
 ---
 {% endif %}
 {% endfor %}

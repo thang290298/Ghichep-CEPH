@@ -15,7 +15,7 @@ images:
   name: "images"
   pg_num: 128
   pgp_num: 128
-  rule_name: "ceph_ssd"
+  rule_name: "ceph_backup"
   type: 1
   erasure_profile: ""
   expected_num_objects: ""
@@ -27,18 +27,18 @@ volumes_hdd:
   name: "volumes_hdd"
   pg_num: 256
   pgp_num: 256
-  rule_name: "ceph_ssd"
+  rule_name: "ceph_hdd"
   type: 1
   erasure_profile: ""
   expected_num_objects: ""
   application: "rbd"
-  size: 1
+  size: 2
   min_size: 1
   pg_autoscale_mode: False
 volumes_ssd:
   name: "volumes_ssd"
-  pg_num: 512
-  pgp_num: 512
+  pg_num: 256
+  pgp_num: 256
   rule_name: "ceph_ssd"
   type: 1
   erasure_profile: ""
@@ -49,13 +49,13 @@ volumes_ssd:
   pg_autoscale_mode: False
 backups:
   name: "backups"
-  pg_num: 64
-  pgp_num: 64
-  rule_name: "ceph_ssd"
+  pg_num: 128
+  pgp_num: 128
+  rule_name: "ceph_backup"
   type: 1
   erasure_profile: ""
   expected_num_objects: ""
   application: "rbd"
-  size: 1
+  size: 2
   min_size: 1
   pg_autoscale_mode: False
