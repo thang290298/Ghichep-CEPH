@@ -3,19 +3,18 @@ create_pools:
   - "{{ images }}"
   - "{{ volumes_hdd }}"
   - "{{ volumes_ssd }}"
-  - "{{ backups }}"  
 
 # Khai bao thong tin netowrk
 network_ceph:  
-  public_networks: "192.168.70.0/24"
-  cluster_network: "10.10.10.0/24"
+  public_networks: "10.171.131.0/24"
+  cluster_network: "110.10.29.0/24"
 
 # Khai bao thong tin chi tiet cho cac pool tren
 images:
   name: "images"
   pg_num: 128
   pgp_num: 128
-  rule_name: "ceph_backup"
+  rule_name: "ceph_images"
   type: 1
   erasure_profile: ""
   expected_num_objects: ""
@@ -45,17 +44,5 @@ volumes_ssd:
   expected_num_objects: ""
   application: "rbd"
   size: 1
-  min_size: 1
-  pg_autoscale_mode: False
-backups:
-  name: "backups"
-  pg_num: 128
-  pgp_num: 128
-  rule_name: "ceph_backup"
-  type: 1
-  erasure_profile: ""
-  expected_num_objects: ""
-  application: "rbd"
-  size: 2
   min_size: 1
   pg_autoscale_mode: False

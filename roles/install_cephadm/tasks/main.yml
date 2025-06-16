@@ -1,23 +1,44 @@
 ---
 ## tasks file for install_cephadm
-- name: Download cephadm
-  get_url:
-    url: https://github.com/ceph/ceph/raw/quincy/src/cephadm/cephadm
-    dest: /root/cephadm
-    mode: '0755'
+- name: install package
+  package:
+    name: epel-release
+    state: present
+  register: result
+  until: result is succeeded
 
-- name: Add repo cephadm
-  shell: "/root/cephadm add-repo --release quincy"
-  args:
-    executable: /bin/bash
+- name: remove remaining local services ceph packages
+  dnf:
+    name: "{{ packages_to_uninstall }}"
+    state: absent
+    autoremove: false
 
-- name: Install cephadm
-  shell: "/root/cephadm install"
-  args:
-    executable: /bin/bash
+- name: install ceph-common on rhel
+  package:
+    name: ceph-common
+    state: "{{ (upgrade_ceph_packages | bool) | ternary('latest', 'present') }}"
+  register: result
+  until: result is succeeded
 
-- name: Add repo with cephadm
-  shell: "cephadm add-repo --release quincy"
+- name: install prerequisites packages on servers
+  package:
+    name: "{{ ceph_pkgs + infra_pkgs }}"
+    state: "{{ (upgrade_ceph_packages | bool) | ternary('latest', 'present') }}"
+  register: result
+  until: result is succeeded
+  when: group_names != [client_group]
 
-- name: Install ceph-common
-  shell: "cephadm install ceph-common"
+- name: install prerequisites packages on clients
+  package:
+    name: "{{ ceph_client_pkgs }}"
+    state: "{{ (upgrade_ceph_packages | bool) | ternary('latest', 'present') }}"
+  register: result
+  until: result is succeeded
+  when: group_names == [client_group]
+
+
+- name: ensure chronyd is running
+  service:
+    name: chronyd
+    state: started
+    enabled: true
